@@ -7,6 +7,10 @@ name: Build EXE
 #   - on a v* tag (e.g. git tag v1.0.0): attached to a versioned GitHub Release
 #     with generated release notes.
 #   - manually any time via the "Run workflow" button on the Actions tab.
+#
+# Uses the gh CLI (preinstalled on runners) instead of softprops/action-gh-release
+# because softprops resolves file globs relative to the workspace root and
+# silently misses app/dist/ files on Windows.
 
 on:
   push:
@@ -45,48 +49,43 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
 
-      - name: Normalize EXE names for stable download links
-        working-directory: app/dist
+      - name: Normalize release asset names
         shell: pwsh
         run: |
-          Get-ChildItem "RBLX Operator Setup *.exe" | Select-Object -First 1 | Copy-Item -Destination "rblx-operator-setup.exe" -Force
-          Get-ChildItem "RBLX Operator *.exe" | Where-Object { $_.Name -notlike "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "rblx-operator-portable.exe" -Force
-          Get-ChildItem *.exe | Select-Object Name, Length
+          Get-ChildItem "app/dist/RBLX Operator Setup *.exe" | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-setup.exe" -Force
+          Get-ChildItem "app/dist/RBLX Operator *.exe" | Where-Object { $_.Name -notlike "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-portable.exe" -Force
+          Copy-Item "plugin/RBLXOperatorCraft.luau" "app/dist/rblx-operator-plugin.luau" -Force
+          Get-ChildItem app/dist/*.exe, app/dist/*.luau | Select-Object Name, Length
 
-      - name: Upload EXE artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: rblx-operator-windows
           path: |
             app/dist/*.exe
+            app/dist/*.luau
           if-no-files-found: error
 
-      - name: Publish to rolling release (every push to main)
+      - name: Publish rolling release (every push to main)
         if: github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: continuous
-          name: "RBLX Operator — continuous build"
-          body: |
-            Automated build from `main`. These assets are overwritten on every
-            push, so this release always holds the newest build. The website's
-            download buttons link here:
-            - `rblx-operator-setup.exe` — installer
-            - `rblx-operator-portable.exe` — portable, no install
-          files: |
-            app/dist/rblx-operator-setup.exe
-            app/dist/rblx-operator-portable.exe
-          allowUpdates: true
-          update_release_body: true
-          make_latest: true
-          draft: false
-          prerelease: false
+        shell: pwsh
+        run: |
+          gh release view continuous *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create continuous --title "RBLX Operator — continuous build" --notes "Automated build from main. These assets are overwritten on every push, so this release always holds the newest build." | Out-Null
+          }
+          gh release upload continuous app/dist/rblx-operator-setup.exe app/dist/rblx-operator-portable.exe app/dist/rblx-operator-plugin.luau --clobber
+          $id = gh release view continuous --json id -q .id
+          gh api -X PATCH "repos/$env:GITHUB_REPOSITORY/releases/$id" -f make_latest=true
 
-      - name: Attach to versioned release (on tags)
+      - name: Publish versioned release (on tags)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            app/dist/rblx-operator-setup.exe
-            app/dist/rblx-operator-portable.exe
-          generate_release_notes: true
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --generate-notes app/dist/rblx-operator-setup.exe app/dist/rblx-operator-portable.exe app/dist/rblx-operator-plugin.luau
+          } else {
+            gh release upload $tag app/dist/rblx-operator-setup.exe app/dist/rblx-operator-portable.exe app/dist/rblx-operator-plugin.luau --clobber
+          }
