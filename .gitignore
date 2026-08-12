@@ -1,0 +1,27 @@
+# Environment / secrets
+.env
+
+# Node
+node_modules/
+
+# Desktop app build output
+app/dist/
+
+# Roblox build artifacts
+*.rbxl
+*.rbxlx
+*.rbxl.bak
+*.rbxlx.bak
+
+# Generated assets & games
+assets/generated/
+games/*/
+!games/.gitkeep
+
+# Runtime test logs (crash logs + test runner output)
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

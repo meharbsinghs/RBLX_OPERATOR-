@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;" />
+  <title>RBLX Operator Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo-img" src="logo.png" alt="RBLX Operator logo" />
+      <div class="brand-text">
+        <span class="brand-name">RBLX OPERATOR</span>
+        <span class="brand-sub">STUDIO CONSOLE</span>
+      </div>
+    </div>
+    <div class="chips">
+      <span id="chip-node" class="chip">Node: …</span>
+      <span id="chip-rojo" class="chip">Rojo: …</span>
+      <span id="chip-gh" class="chip">GitHub: …</span>
+    </div>
+  </header>
+
+  <main>
+    <nav id="tabs">
+      <button class="tab active" data-tab="design">🎨 Design</button>
+      <button class="tab" data-tab="verify">🧪 Verify</button>
+      <button class="tab" data-tab="publish">🚀 Publish</button>
+      <button class="tab" data-tab="projects">📁 Projects</button>
+      <button class="tab" data-tab="settings">⚙️ Settings</button>
+    </nav>
+
+    <section id="tab-design" class="panel active">
+      <div class="card">
+        <h3>Design a game</h3>
+        <p class="hint">Describe <em>any</em> game — the engine derives the complete design (rounds, enemies, weapons, economy, map, lighting, UI theme). Zero keys works via offline mode.</p>
+        <textarea id="idea" spellcheck="false"
+          placeholder="a grim zombie survival shooter: hold barricaded windows, buy weapons off the walls, survive as long as you can"></textarea>
+        <div class="row">
+          <select id="mode">
+            <option value="design">Design loop — OpenCode engineer (end-to-end)</option>
+            <option value="deepseek">DeepSeek design (needs DEEPSEEK_API_KEY)</option>
+            <option value="offline">Offline (zero keys, instant)</option>
+            <option value="spec">Import a spec JSON (designed in any AI chat)</option>
+          </select>
+          <button id="btn-generate" class="primary action">▶ Generate Game</button>
+        </div>
+        <div class="row secondary">
+          <button id="btn-prompt" class="ghost">Print master prompt</button>
+          <button id="btn-env" class="ghost">Open .env</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-verify" class="panel">
+      <div class="card">
+        <h3>Verify &amp; build</h3>
+        <p class="hint">The gate validates every Luau file (<code>--!strict</code>, schema, balance) and every JS file. <code>smoke</code> proves the whole loop: prompt → spec → config.luau → verify.</p>
+        <div class="row">
+          <button id="btn-verify" class="secondary action">Verify all Luau + JS</button>
+          <button id="btn-smoke" class="secondary action">Smoke test (end-to-end)</button>
+        </div>
+        <div class="row">
+          <button id="btn-studio" class="primary action">🛠 Build &amp; open in Roblox Studio</button>
+        </div>
+        <p class="hint small">Needs Rojo once (the app offers scripts\studio.ps1, or rojo.space).</p>
+      </div>
+    </section>
+
+    <section id="tab-publish" class="panel">
+      <div class="card">
+        <h3>Publish to GitHub</h3>
+        <p class="hint">Link your account once (browser + one-time code), then one click creates the repo and pushes. Your <code>.env</code> keys are gitignored — they never leave this machine.</p>
+        <div class="row">
+          <button id="btn-link" class="secondary action">🔗 Link GitHub account</button>
+          <button id="btn-push" class="primary action">🚀 Create repo &amp; push</button>
+        </div>
+        <div class="row">
+          <label class="field">Repo name
+            <input id="repo-name" value="RBLX_OPERATOR-" spellcheck="false" />
+          </label>
+          <label class="check"><input type="checkbox" id="repo-private" /> Private repo</label>
+        </div>
+        <div id="gh-status" class="status-note">Checking GitHub…</div>
+      </div>
+    </section>
+
+    <section id="tab-projects" class="panel">
+      <div class="card">
+        <h3>Your games</h3>
+        <p class="hint">Every design is stored as plain data in <code>games/&lt;name&gt;/spec.json</code>. Recompile any one into the engine at any time.</p>
+        <div id="project-list" class="project-list"><span class="hint">Loading…</span></div>
+      </div>
+    </section>
+
+    <section id="tab-settings" class="panel">
+      <div class="card">
+        <h3>Settings — API keys (all optional)</h3>
+        <p class="hint">Everything works with zero keys. Keys are written to <code>.env</code> (gitignored).</p>
+        <label class="field">DeepSeek — full AI game design
+          <input id="set-deepseek" type="password" placeholder="sk-…" spellcheck="false" />
+        </label>
+        <label class="field">Meshy — text-to-3D assets
+          <input id="set-meshy" type="password" placeholder="…" spellcheck="false" />
+        </label>
+        <label class="field">Roblox Open Cloud — auto-upload assets to Roblox
+          <input id="set-opencloud" type="password" placeholder="…" spellcheck="false" />
+        </label>
+        <label class="field">OpenCode model (agent brain)
+          <input id="set-opencode-model" placeholder="deepseek/deepseek-chat" spellcheck="false" />
+        </label>
+        <label class="field">OpenCode agent
+          <input id="set-opencode-agent" placeholder="build" spellcheck="false" />
+        </label>
+        <div class="row">
+          <button id="btn-save-settings" class="primary action">Save to .env</button>
+          <button id="btn-env2" class="ghost">Open .env file</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="console-wrap">
+      <div class="console-head">
+        <span>Output</span>
+        <span class="console-actions">
+          <button id="btn-abort">⏹ Abort</button>
+          <button id="btn-clear">Clear</button>
+        </span>
+      </div>
+      <div id="console" class="console"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span id="root-path" title="Engine workspace">…</span>
+    <span id="run-state" class="idle">idle</span>
+  </footer>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

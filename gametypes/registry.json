@@ -1,0 +1,70 @@
+{
+  "wave": {
+    "name": "Round-Based Wave",
+    "status": "live",
+    "runtime": "src/server/rounds.luau",
+    "description": "Endless survival: hold the line as rounds escalate. The reference mode.",
+    "spec": "rounds, enemies, weapons, perks, economy, map, audio",
+    "knobs": "winRound: 0, bossEvery: 5"
+  },
+  "extraction": {
+    "name": "Extraction / Objective",
+    "status": "live",
+    "runtime": "src/server/rounds.luau",
+    "description": "Objective win: gear up, survive, and extract by wave N. winRound ends the run.",
+    "spec": "rounds (winRound 3-8), enemies, weapons, perks, economy, map, audio",
+    "knobs": "winRound: 3-8, bossEvery: 1-3, points.starting: 1000-2500"
+  },
+  "defense": {
+    "name": "Defense / Tower Siege",
+    "status": "live",
+    "runtime": "src/server/rounds.luau",
+    "description": "Hold the wall against escalating waves; barricades and repairs matter most.",
+    "spec": "rounds (high baseEnemies), enemies, weapons, perks, economy, map, audio",
+    "knobs": "winRound: 0 or N, barricadeHp: up, maxEnemies: up, economy slower"
+  },
+  "arena": {
+    "name": "Arena / Gauntlet",
+    "status": "live",
+    "runtime": "src/server/rounds.luau",
+    "description": "Close-quarters gauntlets and boss hunts in compact arenas.",
+    "spec": "rounds (compact map), enemies, weapons, perks, economy, map, audio",
+    "knobs": "winRound: N, bossEvery: 1-2, small zones"
+  },
+  "boss-rush": {
+    "name": "Boss Rush",
+    "status": "live",
+    "runtime": "src/server/rounds.luau",
+    "description": "Boss every round; rosters built around one elite at a time.",
+    "spec": "rounds (bossEvery: 1), enemies (isBoss roster), weapons, perks, economy, map, audio",
+    "knobs": "bossEvery: 1, enemy baseHealth down, boss baseHealth up"
+  },
+  "obby": {
+    "name": "Obby",
+    "status": "scaffold",
+    "runtime": "gametypes/obby/runtime (Operator-authored)",
+    "description": "obstacle course platformer: jump, climb, avoid hazards, reach the finish",
+    "spec": "newtype scaffold — Operator fills the runtime + schema"
+  },
+  "tycoon": {
+    "name": "Tycoon",
+    "status": "scaffold",
+    "runtime": "gametypes/tycoon/runtime (Operator-authored)",
+    "description": "Build and upgrade an empire: generators, purchases, automation.",
+    "spec": "newtype scaffold — Operator fills the runtime + schema"
+  },
+  "racing": {
+    "name": "Racing",
+    "status": "scaffold",
+    "runtime": "gametypes/racing/runtime (Operator-authored)",
+    "description": "Vehicles, checkpoints, tracks, timers and drift.",
+    "spec": "newtype scaffold — Operator fills the runtime + schema"
+  },
+  "rpg": {
+    "name": "RPG",
+    "status": "scaffold",
+    "runtime": "gametypes/rpg/runtime (Operator-authored)",
+    "description": "Quests, stats, items, dialogue, and a living world.",
+    "spec": "newtype scaffold — Operator fills the runtime + schema"
+  }
+}

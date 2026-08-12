@@ -1,0 +1,6 @@
+{
+  "deprecated": true,
+  "reason": "This was a shipped preset game. The engine no longer ships games — every game is derived from a prompt.",
+  "replacedBy": "examples/prompts/neon-arena.md",
+  "howToGetThisGame": "node pipeline/bridge.js newgame --offline \"futuristic neon alien wave shooter — the grid is infected, purge it in neon\""
+}

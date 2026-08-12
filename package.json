@@ -1,0 +1,28 @@
+{
+  "name": "rblx-operator",
+  "version": "1.0.0",
+  "description": "RBLX Operator — free, open-source prompt-to-Roblox-game engine. Ships no games: a master derivation prompt + validated spec pipeline turns any game idea into a complete typed Luau runtime game.",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "init": "node pipeline/bridge.js init",
+    "newgame": "node pipeline/bridge.js newgame",
+    "prompt": "node pipeline/bridge.js prompt",
+    "asset": "node pipeline/bridge.js asset",
+    "verify": "node pipeline/bridge.js verify",
+    "build": "node pipeline/bridge.js build",
+    "serve": "node pipeline/bridge.js serve",
+    "test": "node pipeline/bridge.js test",
+    "fix": "node pipeline/bridge.js fix",
+    "operator": "node pipeline/bridge.js operator",
+    "design": "node pipeline/bridge.js design",
+    "smoke": "node pipeline/bridge.js smoke",
+    "app:install": "cd app && npm install",
+    "app:start": "cd app && npx electron .",
+    "app:build": "cd app && npx electron-builder --win nsis portable --publish never"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "RBLXOperator",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$path": "src/shared"
+    },
+    "ServerScriptService": {
+      "$path": "src/server"
+    },
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "StarterPlayerScripts": {
+        "$path": "src/client"
+      }
+    },
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Ambient": [0.10, 0.11, 0.14],
+        "OutdoorAmbient": [0.14, 0.15, 0.18],
+        "Brightness": 1,
+        "ClockTime": 19.5,
+        "FogColor": [0.06, 0.09, 0.07],
+        "FogStart": 40,
+        "FogEnd": 220,
+        "GlobalShadows": true
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "Gravity": 196.2
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "RBLXOperatorCraft",
+  "tree": {
+    "$className": "Model",
+    "$properties": {
+      "Name": "RBLXOperatorCraft"
+    },
+    "RBLXOperatorCraft": {
+      "$className": "Script",
+      "$properties": {
+        "RunContext": "Plugin"
+      },
+      "$path": "RBLXOperatorCraft.luau"
+    }
+  }
+}
