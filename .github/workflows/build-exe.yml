@@ -69,6 +69,8 @@ jobs:
       - name: Publish rolling release (every push to main)
         if: github.ref == 'refs/heads/main'
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release view continuous *> $null
           if ($LASTEXITCODE -ne 0) {
@@ -81,6 +83,8 @@ jobs:
       - name: Publish versioned release (on tags)
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           $tag = $env:GITHUB_REF_NAME
           gh release view $tag *> $null
