@@ -52,8 +52,10 @@ jobs:
       - name: Normalize release asset names
         shell: pwsh
         run: |
-          Get-ChildItem "app/dist/RBLX Operator Setup *.exe" | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-setup.exe" -Force
-          Get-ChildItem "app/dist/RBLX Operator *.exe" | Where-Object { $_.Name -notlike "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-portable.exe" -Force
+          # electron-builder outputs 'RBLX-Operator-Setup-1.0.0.exe' (hyphens).
+          # Match by '*Setup*' / non-setup so naming changes never break us.
+          Get-ChildItem app/dist/*.exe | Where-Object { $_.Name -like "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-setup.exe" -Force
+          Get-ChildItem app/dist/*.exe | Where-Object { $_.Name -notlike "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "app/dist/rblx-operator-portable.exe" -Force
           Copy-Item "plugin/RBLXOperatorCraft.luau" "app/dist/rblx-operator-plugin.luau" -Force
           Get-ChildItem app/dist/*.exe, app/dist/*.luau | Select-Object Name, Length
 
@@ -77,8 +79,11 @@ jobs:
             gh release create continuous --title "RBLX Operator — continuous build" --notes "Automated build from main. These assets are overwritten on every push, so this release always holds the newest build." | Out-Null
           }
           gh release upload continuous app/dist/rblx-operator-setup.exe app/dist/rblx-operator-portable.exe app/dist/rblx-operator-plugin.luau --clobber
-          $id = gh release view continuous --json id -q .id
-          gh api -X PATCH "repos/$env:GITHUB_REPOSITORY/releases/$id" -f make_latest=true
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $id = (gh release view continuous --json id -q .id).Trim()
+          if ($id) {
+            gh api -X PATCH "repos/$env:GITHUB_REPOSITORY/releases/$id" -f make_latest=true *> $null
+          }
 
       - name: Publish versioned release (on tags)
         if: startsWith(github.ref, 'refs/tags/')
