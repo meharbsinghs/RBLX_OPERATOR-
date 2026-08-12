@@ -1,7 +1,7 @@
 {
   "name": "rblx-operator-studio",
   "version": "1.0.0",
-  "description": "RBLX Operator Studio — desktop console for the RBLX Operator engine. Bundles the full engine + Node runtime: design, verify, build, open in Studio, and publish to GitHub from one UI.",
+  "description": "RBLX Operator Studio — desktop console for the RBLX Operator engine. Ships with Zombie Rush: Greenwood Siege. Bundles the full engine + Node runtime: play, design, verify, build, open in Studio, and publish from one UI.",
   "main": "main.js",
   "author": "RBLX Operator contributors",
   "license": "MIT",
@@ -50,7 +50,11 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "artifactName": "RBLX-Operator-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "RBLX-Operator-${version}.exe"
     }
   }
 }

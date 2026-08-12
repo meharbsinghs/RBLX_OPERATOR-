@@ -104,7 +104,7 @@ never commit secrets (`.env`), never mutate `pipeline/codegen.js`'s
 
 ## Rules
 
-- The engine ships no games. A design task always starts from the user's idea
+- The engine ships games. A design task always starts from the user's idea
   — never from a memorized template.
 - The runtime must stay generic: any new system must be spec-driven (read
   `config.luau`) and data-configurable, so the next prompt can use it too.

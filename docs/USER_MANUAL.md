@@ -4,7 +4,7 @@ Everything you need to go from *nothing installed* to *playing a game you
 designed with a prompt* — and then to publish the system on GitHub.
 
 **One sentence:** RBLX Operator is a free engine that derives a complete,
-balanced, playable Roblox game from a prompt. It ships no games — you design
+balanced, playable Roblox game from a prompt. It ships the Zombie Rush reference game — you design
 the game by describing it.
 
 ---

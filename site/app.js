@@ -3,13 +3,13 @@
 
 "use strict";
 
-const IDEA = "a tense neon extraction shooter on a derelict space station";
+const IDEA = "zombie survival in a cursed mall, 10 waves";
 const STEPS = [
-  { id: "t1", text: "[design] goal → round structure: extraction, win by wave 5", cls: "t-out" },
-  { id: "t2", text: "[design] theme → art direction: neon overdrive lighting + sound identity", cls: "t-out" },
-  { id: "t3", text: "[design] roster → 7 weapons · 4 enemies · 5 perks · 3 doors · 4 zones", cls: "t-out" },
-  { id: "t4", text: "[codegen] emitted src/shared/config.luau (typed, balanced, clamped)", cls: "t-out" },
-  { id: "t5", text: "[verify] PASS — Luau --!strict + JS syntax OK · ready to play", cls: "t-ok" },
+  { id: "t1", text: "operator: goal → rounds, win by wave 10 · 6 enemy types", cls: "t-dim" },
+  { id: "t2", text: "craft: sound identity + lighting mood · storm-dusk horror", cls: "t-dim" },
+  { id: "t3", text: "codegen: emitted src/shared/config.luau — typed, balanced", cls: "t-dim" },
+  { id: "t4", text: "verify: 25 files · --!strict · block balance · PASS", cls: "t-dim" },
+  { id: "t5", text: "✔ SHIPPED → ZombieMall.rbxl · open in Studio? y", cls: "t-ok" },
 ];
 
 function typeIdea(el, done) {
@@ -32,11 +32,11 @@ function revealStep(idx) {
   const el = document.getElementById(s.id);
   el.textContent = s.text;
   el.className = "t-line " + s.cls;
-  setTimeout(() => revealStep(idx + 1), 420);
+  setTimeout(() => revealStep(idx + 1), 460);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   typeIdea(document.getElementById("typed-idea"), () => {
-    setTimeout(() => revealStep(0), 350);
+    setTimeout(() => revealStep(0), 380);
   });
 });

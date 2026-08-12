@@ -9,7 +9,8 @@
  * describes. This is the part that replaces "AI writes one-off scripts" with
  * "AI writes a real game design".
  *
- * The engine ships NO games. There is exactly one derivation interface:
+ * The engine ships the Zombie Rush reference game (src/shared/config.luau).
+ * There is exactly one derivation interface for every OTHER game:
  *
  *   1. DeepSeek (recommended) — the master system prompt in
  *      pipeline/system_prompt.md is sent to the designer model along with the
@@ -63,9 +64,9 @@ const DEFAULTS = {
   name: "Zombie Rush",
   tagline: "Hold the line. Survive the horde.",
   // Game type: the genre contract this spec is designed for. "wave" is the
-  // reference action mode; extraction/defense/arena/boss-rush are the other
-  // modes of the shipped action runtime. Anything else is a scaffolded type
-  // pack (gametypes/) — the unbounded-genre mechanism (see GAME_TYPES.md).
+  // shipped Zombie Rush mode; extraction/defense/arena/boss-rush are the other
+  // modes of the action runtime. Anything else is a scaffolded type pack
+  // (gametypes/) — the unbounded-genre mechanism (see GAME_TYPES.md).
   gameType: "wave",
   rounds: {
     baseEnemies: 5,
@@ -73,9 +74,9 @@ const DEFAULTS = {
     maxEnemies: 26,
     intermissionSeconds: 10,
     playerScaleCap: 3,
-    bossEvery: 5,
+    bossEvery: 10,
     barricadeHp: 300,
-    winRound: 0,
+    winRound: 10,
   },
   player: {
     maxHealth: 100,

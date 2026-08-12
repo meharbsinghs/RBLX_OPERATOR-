@@ -3,13 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RBLX OPERATOR — prompt to Roblox game engine</title>
-  <meta name="description" content="RBLX Operator is a free, open-source engine that derives complete, balanced, playable Roblox games from a single prompt. Describe a game. Get a real game." />
+  <title>RBLX OPERATOR — one prompt, one complete Roblox game</title>
+  <meta name="description" content="RBLX Operator ships complete, balanced, playable Roblox games from a single prompt — real economy, real lighting, real sound, real systems. Free, open source, Windows .exe included." />
+  <meta property="og:title" content="RBLX OPERATOR — one prompt, one complete Roblox game" />
+  <meta property="og:description" content="Describe a game. Get a complete, balanced, playable Roblox game — real systems, real economy, real lighting, real sound. Free & open source." />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="noise" aria-hidden="true"></div>
 
   <header class="nav">
     <a class="nav-brand" href="#top">
@@ -17,142 +23,157 @@
       <span class="nav-name">RBLX&nbsp;OPERATOR</span>
     </a>
     <nav class="nav-links">
-      <a href="#pipeline">Pipeline</a>
+      <a href="#games">Games</a>
       <a href="#features">Features</a>
-      <a href="#gametypes">Game&nbsp;types</a>
-      <a href="#crew">The&nbsp;crew</a>
-      <a href="#download" class="nav-cta">Download</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#crew">Crew</a>
+      <a href="#download" class="nav-cta">Download&nbsp;↓</a>
     </nav>
   </header>
 
   <main id="top">
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="hero-mascot">
-        <img src="logo.png" alt="BUILDERBOI — the RBLX Operator mascot" />
-        <span class="mascot-tag">BUILDERBOI // the mascot</span>
-      </div>
-      <h1 class="hero-title">RBLX&nbsp;OPERATOR</h1>
-      <p class="hero-sub">A free, open-source engine that turns <span class="hl">one prompt</span>
-        into a complete, balanced, <span class="hl">playable Roblox game</span> — real systems,
-        real economy, real lighting, real sound. Ships no games. It derives yours.</p>
 
-      <div class="terminal" aria-label="Live example">
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="hero-eyebrow">
+        <img src="opencode-logo.png" alt="opencode" class="eyebrow-mark" />
+        <span>ORCHESTRATED BY <b>OPENCODE</b> · SHIPS GAMES</span>
+      </div>
+
+      <h1 class="hero-title">
+        One prompt.<br />
+        <span class="hl">One complete Roblox game.</span>
+      </h1>
+
+      <p class="hero-sub">
+        RBLX Operator turns a single sentence into a complete, balanced,
+        <b>playable</b> Roblox game — real economy, real lighting, real sound,
+        real systems. Not a template. Not a placeholder. A game you can press
+        Play on. <b>Free.</b> Open source. For Windows.
+      </p>
+
+      <div class="terminal" aria-label="RBLX Operator — live example">
         <div class="terminal-bar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="terminal-title">operator — rblx-operator</span>
+          <span class="terminal-title">rblx — operator</span>
         </div>
         <div class="terminal-body">
-          <div class="t-line"><span class="t-cmd">$</span> bridge newgame "<span id="typed-idea"></span><span class="cursor">▊</span>"</div>
-          <div class="t-line t-out" id="t1">[design] deriving complete GameSpec…</div>
-          <div class="t-line t-out" id="t2"></div>
-          <div class="t-line t-out" id="t3"></div>
-          <div class="t-line t-out" id="t4"></div>
+          <div class="t-line"><span class="t-prompt">❯</span> rblx newgame "<span id="typed-idea"></span><span class="cursor">▊</span>"</div>
+          <div class="t-line t-dim" id="t1"></div>
+          <div class="t-line t-dim" id="t2"></div>
+          <div class="t-line t-dim" id="t3"></div>
+          <div class="t-line t-dim" id="t4"></div>
           <div class="t-line t-ok" id="t5"></div>
-          <div class="t-line"><span class="t-cmd">$</span> <span class="cursor">▊</span></div>
+          <div class="t-line"><span class="t-prompt">❯</span> <span class="cursor">▊</span></div>
         </div>
       </div>
 
       <div class="hero-cta">
-        <a class="btn primary" href="https://github.com/meharbsinghs/RBLX_OPERATOR-" target="_blank" rel="noopener">View on GitHub</a>
-        <a class="btn" href="#download">Get the .exe</a>
-        <a class="btn ghost" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/README.md" target="_blank" rel="noopener">Read the docs</a>
+        <a class="btn primary" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-setup.exe" target="_blank" rel="noopener">Download for Windows</a>
+        <a class="btn" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/plugin/RBLXOperatorCraft.luau" target="_blank" rel="noopener">Studio plugin</a>
+        <a class="btn ghost" href="https://github.com/meharbsinghs/RBLX_OPERATOR-" target="_blank" rel="noopener">Source on GitHub</a>
       </div>
 
       <div class="hero-stats">
-        <div><b>1</b><span>prompt</span></div>
+        <div><b>1</b><span>prompt → game</span></div>
         <div><b>0</b><span>keys required</span></div>
         <div><b>∞</b><span>game types</span></div>
-        <div><b>0</b><span>games shipped</span></div>
+        <div><b>$0</b><span>free forever</span></div>
       </div>
     </section>
 
-    <!-- ============ PIPELINE ============ -->
+    <!-- ================= SHIPS GAMES ================= -->
+    <section id="games" class="section">
+      <h2 class="section-title"><span class="prompt">❯</span> every prompt ships a <span class="hl">full game</span></h2>
+      <p class="section-sub">
+        Not a demo. Not a shooting gallery of gray boxes. Each prompt produces a
+        complete package — the same systems a commercial Roblox studio would
+        build by hand.
+      </p>
+      <div class="ship-grid">
+        <div class="ship"><span class="ship-k">01</span><h3>Map &amp; world</h3><p>Procedural layout with hand-pinned props, zones, doors and a waypoint AI graph.</p></div>
+        <div class="ship"><span class="ship-k">02</span><h3>Lighting &amp; atmosphere</h3><p>Mood profile per game — storm, neon, dusk, horror — painted into Studio before you press Play.</p></div>
+        <div class="ship"><span class="ship-k">03</span><h3>Economy</h3><p>Points, perks, mystery box, pack-a-punch, wall buys — balanced to fund progression.</p></div>
+        <div class="ship"><span class="ship-k">04</span><h3>Enemies &amp; AI</h3><p>Up to 6 enemy types, escalating rounds, boss waves, waypoint pathing — no NavMesh needed.</p></div>
+        <div class="ship"><span class="ship-k">05</span><h3>Weapons &amp; feel</h3><p>Distinct weapon roles with spring-physics viewmodel: sway, kick, ADS, reload, bob.</p></div>
+        <div class="ship"><span class="ship-k">06</span><h3>Sound identity</h3><p>Ambience, a music tension curve per round state, and signature SFX — every game sounds like itself.</p></div>
+        <div class="ship"><span class="ship-k">07</span><h3>UI &amp; HUD</h3><p>Data-driven interface with theme tokens that match the game's identity.</p></div>
+        <div class="ship"><span class="ship-k">08</span><h3>Anti-cheat &amp; netcode</h3><p>Server-authoritative everything. Batched compressed networking for hordes.</p></div>
+        <div class="ship"><span class="ship-k">09</span><h3>3D assets</h3><p>Meshy text-to-3D for enemies, props and maps — injected as live asset ids via Open Cloud.</p></div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section id="features" class="section">
+      <h2 class="section-title"><span class="prompt">❯</span> built like <span class="hl">commercial software</span></h2>
+      <p class="section-sub">The runtime is a fixed, typed, server-authoritative engine. The game is data. The prompt is the interface.</p>
+      <div class="grid">
+        <div class="card"><span class="card-k">game_is_data</span><h3>Game-is-data</h3><p>Balance, rosters, economy, map, lighting, UI tokens and audio live in one generated spec. Swap it — get a different game.</p></div>
+        <div class="card"><span class="card-k">strict_luau</span><h3>--!strict everywhere</h3><p>Every file typed, every remote declared, every number clamped. The gate runs on CI before anything ships.</p></div>
+        <div class="card"><span class="card-k">craft_layer</span><h3>Craft layer</h3><p>Sound identity, music tension curves, lighting moods and story hooks — the polish that separates real games from prototypes.</p></div>
+        <div class="card"><span class="card-k">waypoint_ai</span><h3>Waypoint AI</h3><p>No NavMesh. Zone-center waypoint graphs with LOS shortcuts and barricade targeting — works on any generated map.</p></div>
+        <div class="card"><span class="card-k">batched_net</span><h3>Batched networking</h3><p>Hordes ride one compressed remote; kills carry local death VFX with zero extra traffic.</p></div>
+        <div class="card"><span class="card-k">self_testing</span><h3>Self-testing</h3><p><code>_G.__TESTING</code> spawns rounds, fires the hitscan engine, drives the shop — machine-parseable PASS/FAIL on CI.</p></div>
+        <div class="card"><span class="card-k">meshy_assets</span><h3>Meshy 3D</h3><p>Text-to-3D for enemies, props and maps — auto-uploaded to Roblox via Open Cloud as live <code>rbxassetid://</code> links.</p></div>
+        <div class="card"><span class="card-k">hot_fix</span><h3>Hot-fix loop</h3><p>Playtest crashes are parsed, mapped to repo files and patched by the Operator automatically.</p></div>
+        <div class="card"><span class="card-k">unbounded</span><h3>Unbounded genres</h3><p>Wave, extraction, defense, arena, boss-rush ship today. <code>newtype</code> scaffolds obby, tycoon, racing, RPG packs.</p></div>
+      </div>
+    </section>
+
+    <!-- ================= PIPELINE ================= -->
     <section id="pipeline" class="section">
-      <h2 class="section-title">/<span class="hl">pipeline</span></h2>
-      <p class="section-sub">One derivation interface, four routes, one typed runtime.</p>
+      <h2 class="section-title"><span class="prompt">❯</span> the pipeline</h2>
+      <p class="section-sub">From words to a playable .rbxl in one command — every step automated and verified.</p>
       <div class="pipe">
         <div class="pipe-step">
           <span class="pipe-n">01</span>
           <h3>You describe</h3>
-          <p>“a tense neon extraction shooter set on a derelict space station”</p>
+          <p>“a tense zombie survival in a cursed mall, 10 waves”</p>
         </div>
         <div class="pipe-arrow">→</div>
         <div class="pipe-step">
           <span class="pipe-n">02</span>
-          <h3>The brain designs</h3>
-          <p>Operator / DeepSeek / any AI chat derives a complete GameSpec JSON from the master prompt.</p>
+          <h3>Operator designs</h3>
+          <p>OpenCode / DeepSeek / any AI derives a complete GameSpec from the master prompt.</p>
         </div>
         <div class="pipe-arrow">→</div>
         <div class="pipe-step">
           <span class="pipe-n">03</span>
-          <h3>The engine compiles</h3>
-          <p>Structured validation + clamping emits one typed <code>config.luau</code> — the whole game.</p>
+          <h3>Engine compiles</h3>
+          <p>Validation + clamping emit one typed <code>config.luau</code> — the whole game.</p>
         </div>
         <div class="pipe-arrow">→</div>
         <div class="pipe-step">
           <span class="pipe-n">04</span>
-          <h3>The gate verifies</h3>
-          <p><code>--!strict</code> Luau, naming, block balance, JS syntax — CI-enforced on every push.</p>
+          <h3>Gate verifies</h3>
+          <p><code>--!strict</code>, naming, block balance, JS syntax — enforced on every push.</p>
         </div>
         <div class="pipe-arrow">→</div>
         <div class="pipe-step">
           <span class="pipe-n">05</span>
-          <h3>You playtest</h3>
-          <p>Rojo build → Studio → press Play, with the Craft plugin streaming every engine event.</p>
+          <h3>You play it</h3>
+          <p>Build → Studio → Play, with the Craft plugin streaming every engine event.</p>
         </div>
       </div>
     </section>
 
-    <!-- ============ FEATURES ============ -->
-    <section id="features" class="section">
-      <h2 class="section-title">/<span class="hl">features</span></h2>
-      <p class="section-sub">The engine is fixed and generic. The design is data. The prompt is the interface.</p>
-      <div class="grid">
-        <div class="card"><h3>Game-is-data</h3><p>Balance, rosters, economy, map, lighting, UI tokens and audio identity all live in one generated spec. Swap it, get a different game.</p></div>
-        <div class="card"><h3>Server-authoritative</h3><p>Hitscan, damage, economy validated server-side. Anti-cheat samples movement, rejects impossible shots, probes wall-clips.</p></div>
-        <div class="card"><h3>Craft layer</h3><p>Sound identity per game (ambience, music tension curve, signature SFX), atmosphere + lighting mood, story hooks — Michael’s Zombies caliber.</p></div>
-        <div class="card"><h3>Waypoint AI</h3><p>No NavMesh. Zone-center waypoint graphs with LOS shortcuts and barricade targeting work on any generated map.</p></div>
-        <div class="card"><h3>Batched networking</h3><p>Hordes ride one compressed remote at config.net.enemyBatchHz; kills carry local death VFX with zero extra traffic.</p></div>
-        <div class="card"><h3>Self-testing</h3><p><code>_G.__TESTING = true</code> spawns rounds, fires the hitscan engine, drives the shop, prints machine-parseable PASS/FAIL.</p></div>
-        <div class="card"><h3>Meshy assets</h3><p>Text-to-3D for enemies, props and maps — auto-uploaded to Roblox via Open Cloud as live rbxassetid:// links.</p></div>
-        <div class="card"><h3>Hot-fix loop</h3><p>Playtest crashes are parsed, mapped to repo files and patched by the Operator automatically.</p></div>
-        <div class="card"><h3>Free-tier friendly</h3><p>Zero keys run everything. DeepSeek, Meshy, Open Cloud and Operator are drop-in upgrades; every failure degrades gracefully.</p></div>
-      </div>
-    </section>
-
-    <!-- ============ GAME TYPES ============ -->
-    <section id="gametypes" class="section">
-      <h2 class="section-title">/<span class="hl">game&nbsp;types</span> <span class="tag">unbounded</span></h2>
-      <p class="section-sub">The ceiling is not bounded. What ships today is the action-shooter family; <code>newtype</code> scaffolds packs that extend the runtime to any genre.</p>
-      <div class="types">
-        <div class="type live"><span class="type-dot"></span><b>wave</b><p>round-based survival</p></div>
-        <div class="type live"><span class="type-dot"></span><b>extraction</b><p>objective win by wave N</p></div>
-        <div class="type live"><span class="type-dot"></span><b>defense</b><p>hold the wall, tower siege</p></div>
-        <div class="type live"><span class="type-dot"></span><b>arena</b><p>gauntlets &amp; boss hunts</p></div>
-        <div class="type live"><span class="type-dot"></span><b>boss-rush</b><p>boss every round</p></div>
-        <div class="type next"><span class="type-dot"></span><b>obby</b><p>newtype scaffold</p></div>
-        <div class="type next"><span class="type-dot"></span><b>tycoon</b><p>newtype scaffold</p></div>
-        <div class="type next"><span class="type-dot"></span><b>racing</b><p>newtype scaffold</p></div>
-        <div class="type next"><span class="type-dot"></span><b>rpg</b><p>newtype scaffold</p></div>
-      </div>
-      <p class="section-sub small">Every new type is a pack of typed Luau + a spec schema, scaffolded by <code>bridge.js newtype</code> and authored by the Operator — delivered and playtested through the Studio Craft plugin.</p>
-    </section>
-
-    <!-- ============ THE CREW ============ -->
+    <!-- ================= CREW ================= -->
     <section id="crew" class="section">
-      <h2 class="section-title">/<span class="hl">the&nbsp;crew</span></h2>
+      <h2 class="section-title"><span class="prompt">❯</span> the crew</h2>
       <p class="section-sub">One orchestrator commands a crew of free specialists.</p>
       <div class="crew">
         <div class="crew-card lead">
           <span class="role">ORCHESTRATOR</span>
           <h3>Buffy · Freebuff</h3>
-          <p>Commands the whole pipeline: plans the game, dispatches designers and engineers, verifies, pushes to GitHub, runs the release loop. Built this system.</p>
+          <p>Commands the whole pipeline: plans the game, dispatches designers and engineers, verifies, pushes, runs the release loop.</p>
         </div>
-        <div class="crew-card">
+        <div class="crew-card op">
           <span class="role">ENGINEER</span>
-          <h3>Operator · OpenCode</h3>
-          <p>The in-repo engineering brain: end-to-end design (<code>design</code>), runtime edits (<code>operator</code>), crash-log hot-fixes (<code>fix</code>).</p>
+          <h3>
+            <img src="opencode-logo.png" alt="" class="op-logo" />
+            Operator · OpenCode
+          </h3>
+          <p>The in-repo engineering brain: end-to-end design, runtime edits, crash-log hot-fixes. This system's operator.</p>
         </div>
         <div class="crew-card">
           <span class="role">DESIGN BRAIN</span>
@@ -167,30 +188,42 @@
       </div>
     </section>
 
-    <!-- ============ DOWNLOAD ============ -->
+    <!-- ================= DOWNLOAD ================= -->
     <section id="download" class="section">
-      <h2 class="section-title">/<span class="hl">download</span></h2>
-      <p class="section-sub">Windows desktop app — no terminal, no Node, just Roblox Studio.</p>
+      <h2 class="section-title"><span class="prompt">❯</span> download</h2>
+      <p class="section-sub">Free forever. Windows only for now. No terminal, no Node.js — just Roblox Studio.</p>
       <div class="dl">
-        <div class="dl-card">
-          <h3>RBLX Operator Studio (.exe)</h3>
-          <p>Design · Verify · Build &amp; open in Studio · Publish to GitHub — all in one console. Bundles the engine and its Node runtime.</p>
-          <div class="dl-btns">
-            <a class="btn primary" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases" target="_blank" rel="noopener">Latest release</a>
-            <a class="btn" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/actions/workflows/build-exe.yml" target="_blank" rel="noopener">Build EXE workflow</a>
-          </div>
-          <p class="dl-note">Every push builds the installer + portable .exe as a workflow artifact. Tag a release (<code>git tag v1.0.0</code>) to attach them to Releases.</p>
-        </div>
-        <div class="dl-card">
+        <a class="dl-card" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-setup.exe" target="_blank" rel="noopener">
+          <span class="dl-os">WINDOWS</span>
+          <h3>RBLX Operator — Installer</h3>
+          <p>The desktop app: design, verify, build &amp; open in Studio, publish — one console. Bundles the engine + its Node runtime.</p>
+          <span class="btn primary">Download .exe ↓</span>
+          <span class="dl-note">rblx-operator-setup.exe · ~80 MB</span>
+        </a>
+        <a class="dl-card" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-portable.exe" target="_blank" rel="noopener">
+          <span class="dl-os">WINDOWS</span>
+          <h3>RBLX Operator — Portable</h3>
+          <p>No install. Run the same app straight from a USB or downloads folder.</p>
+          <span class="btn">Portable .exe ↓</span>
+          <span class="dl-note">rblx-operator-portable.exe · ~80 MB</span>
+        </a>
+        <a class="dl-card" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/plugin/RBLXOperatorCraft.luau" target="_blank" rel="noopener">
+          <span class="dl-os">STUDIO</span>
           <h3>The Craft plugin</h3>
-          <p>Devlog console, one-click playtest, lighting mood presets, GameSpec mood preview, Meshy asset injection — inside Roblox Studio.</p>
-          <div class="dl-btns">
-            <a class="btn" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/tree/main/plugin" target="_blank" rel="noopener">Plugin source</a>
-            <a class="btn ghost" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/scripts/plugin.ps1" target="_blank" rel="noopener">Install script</a>
-          </div>
-        </div>
+          <p>Devlog console, one-click playtest, lighting mood presets, GameSpec preview, Meshy asset injection — inside Roblox Studio.</p>
+          <span class="btn">Plugin source ↓</span>
+          <span class="dl-note">plugin/RBLXOperatorCraft.luau</span>
+        </a>
+        <a class="dl-card" href="https://github.com/meharbsinghs/RBLX_OPERATOR-" target="_blank" rel="noopener">
+          <span class="dl-os">OPEN SOURCE</span>
+          <h3>Source on GitHub</h3>
+          <p>MIT licensed. Fork it, ship your own games, contribute, or build the .exe yourself in minutes.</p>
+          <span class="btn ghost">github.com/meharbsinghs/RBLX_OPERATOR-</span>
+          <span class="dl-note">MIT · CI · Pages · Build EXE</span>
+        </a>
       </div>
     </section>
+
   </main>
 
   <footer>
@@ -198,8 +231,15 @@
       <img src="logo.png" alt="" class="foot-logo" />
       <span>RBLX OPERATOR</span>
     </div>
-    <p class="foot-text">MIT licensed · open source · orchestrated by <b>Buffy (Freebuff)</b> with Operator · DeepSeek · Meshy</p>
-    <p class="foot-links"><a href="https://github.com/meharbsinghs/RBLX_OPERATOR-" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/AUTHORS.md" target="_blank" rel="noopener">Authors</a> · <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/GAME_TYPES.md" target="_blank" rel="noopener">Game types</a></p>
+    <p class="foot-text">
+      Free &amp; open source · MIT · Ships complete Roblox games from one prompt.
+    </p>
+    <p class="foot-links">
+      <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-" target="_blank" rel="noopener">GitHub</a>
+      · <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/README.md" target="_blank" rel="noopener">Docs</a>
+      · <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases" target="_blank" rel="noopener">Releases</a>
+      · <a href="https://github.com/meharbsinghs/RBLX_OPERATOR-/blob/main/AUTHORS.md" target="_blank" rel="noopener">Authors</a>
+    </p>
   </footer>
 
   <script src="app.js"></script>

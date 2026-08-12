@@ -222,8 +222,28 @@ function main() {
     process.exit(1);
   }
   const src = fs.readFileSync(SRC);
-  const img = decodePng(src);
+  let img = decodePng(src);
   console.log(`[build-icon] decoded ${img.width}x${img.height} logo`);
+
+  // Center-crop non-square sources to a square canvas first — no distortion.
+  if (img.width !== img.height) {
+    const side = Math.min(img.width, img.height);
+    const offX = Math.floor((img.width - side) / 2);
+    const offY = Math.floor((img.height - side) / 2);
+    const cropped = Buffer.alloc(side * side * 4);
+    for (let y = 0; y < side; y++) {
+      for (let x = 0; x < side; x++) {
+        const si = ((offY + y) * img.width + (offX + x)) * 4;
+        const di = (y * side + x) * 4;
+        cropped[di] = img.pixels[si];
+        cropped[di + 1] = img.pixels[si + 1];
+        cropped[di + 2] = img.pixels[si + 2];
+        cropped[di + 3] = img.pixels[si + 3];
+      }
+    }
+    img = { width: side, height: side, pixels: cropped };
+    console.log(`[build-icon] center-cropped to ${side}x${side}`);
+  }
 
   const sizes = [256, 128, 48, 32, 16];
   const entries = [];

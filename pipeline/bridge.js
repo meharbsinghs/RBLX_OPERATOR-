@@ -21,8 +21,9 @@
  *   node pipeline/bridge.js operator "<task>"         # engineering loop via the OpenCode engineer
  *   node pipeline/bridge.js smoke ["<idea>"]          # one-command offline end-to-end proof
  *
- * The engine ships no games. Every game is derived from a prompt: the master
- * derivation prompt (pipeline/system_prompt.md) is the design interface — the
+ * The engine ships the Zombie Rush reference game; every other game is
+ * derived from a prompt: the master derivation prompt
+ * (pipeline/system_prompt.md) is the design interface — the
  * pipeline sends it to DeepSeek, and you can paste it into ANY AI chat and
  * import the resulting JSON with --spec. The OpenCode operator
  * (pipeline/operators/) is the same interface extended to an end-to-end game

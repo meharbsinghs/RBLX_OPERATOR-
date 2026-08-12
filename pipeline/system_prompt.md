@@ -2,7 +2,8 @@
 
 > **This file is the game-design interface of the RBLX Operator engine.**
 > The engine is generic: it renders whatever GameSpec it is given. It ships
-> **no games**. Every game is derived from a prompt — this prompt teaches the
+> with the **Zombie Rush** reference game and turns any prompt into another —
+> this prompt teaches the
 > AI (any model) how to turn any game idea or goal into a complete, balanced,
 > production-quality GameSpec with a real *craft layer* (sound identity, mood,
 > feel, story). The pipeline (`node pipeline/bridge.js newgame

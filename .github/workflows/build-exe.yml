@@ -1,9 +1,12 @@
 name: Build EXE
 
 # Produces the downloadable Windows desktop app (RBLX Operator Studio):
-#   - on every push to main: the .exe files are uploaded as a workflow Artifact
-#   - on a v* tag (e.g. git tag v1.0.0): attached to a GitHub Release
-#   - manually any time via the "Run workflow" button on the Actions tab
+#   - on every push to main: the .exe files are attached to the rolling
+#     'continuous' release — the website's download links always point here
+#     and always resolve to the newest build (assets overwritten each push).
+#   - on a v* tag (e.g. git tag v1.0.0): attached to a versioned GitHub Release
+#     with generated release notes.
+#   - manually any time via the "Run workflow" button on the Actions tab.
 
 on:
   push:
@@ -42,6 +45,14 @@ jobs:
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
 
+      - name: Normalize EXE names for stable download links
+        working-directory: app/dist
+        shell: pwsh
+        run: |
+          Get-ChildItem "RBLX Operator Setup *.exe" | Select-Object -First 1 | Copy-Item -Destination "rblx-operator-setup.exe" -Force
+          Get-ChildItem "RBLX Operator *.exe" | Where-Object { $_.Name -notlike "*Setup*" } | Select-Object -First 1 | Copy-Item -Destination "rblx-operator-portable.exe" -Force
+          Get-ChildItem *.exe | Select-Object Name, Length
+
       - name: Upload EXE artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -50,9 +61,32 @@ jobs:
             app/dist/*.exe
           if-no-files-found: error
 
-      - name: Attach to GitHub Release (on tags)
+      - name: Publish to rolling release (every push to main)
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: continuous
+          name: "RBLX Operator — continuous build"
+          body: |
+            Automated build from `main`. These assets are overwritten on every
+            push, so this release always holds the newest build. The website's
+            download buttons link here:
+            - `rblx-operator-setup.exe` — installer
+            - `rblx-operator-portable.exe` — portable, no install
+          files: |
+            app/dist/rblx-operator-setup.exe
+            app/dist/rblx-operator-portable.exe
+          allowUpdates: true
+          update_release_body: true
+          make_latest: true
+          draft: false
+          prerelease: false
+
+      - name: Attach to versioned release (on tags)
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: app/dist/*.exe
+          files: |
+            app/dist/rblx-operator-setup.exe
+            app/dist/rblx-operator-portable.exe
           generate_release_notes: true

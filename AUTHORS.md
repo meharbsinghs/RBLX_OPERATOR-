@@ -16,7 +16,8 @@ credits that crew.
 
 ## The deal
 
-The system ships **no games** — it derives them. The crew above is what turns
+The system **ships games** — complete, balanced, playable Roblox games from
+a single prompt. The crew above is what turns
 *a prompt* into *a playable, balanced, crafted Roblox game*:
 
 ```

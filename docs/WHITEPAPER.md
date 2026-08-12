@@ -83,7 +83,7 @@ and it is deliberately **model-agnostic**:
 | Offline | Zero-key text derivation reads theme/goal signals and nudges the reference spec |
 | Human | Edit `games/<slug>/spec.json` directly and regenerate |
 
-The engine ships **no games**. The committed `config.luau` is the engine's
+The engine ships the Zombie Rush reference game. The committed `config.luau` is the engine's
 reference spec — the minimal playable starting point every derived game is
 built from and measured against. Nothing in the repo pretends to be *the*
 game.

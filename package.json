@@ -1,7 +1,7 @@
 {
   "name": "rblx-operator",
   "version": "1.0.0",
-  "description": "RBLX Operator — free, open-source prompt-to-Roblox-game engine. Ships no games: a master derivation prompt + validated spec pipeline turns any game idea into a complete typed Luau runtime game.",
+  "description": "RBLX Operator — free, open-source Roblox game engine. Ships with Zombie Rush: Greenwood Siege, a complete 10-wave survival shooter, and generates any game you can describe from a single prompt.",
   "license": "MIT",
   "private": true,
   "type": "commonjs",

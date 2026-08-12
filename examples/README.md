@@ -1,6 +1,6 @@
-# Examples — derivation prompts, not shipped games
+# Examples — derivation prompts, the inputs to shipped games
 
-The engine ships **no games**. These files are **example prompts** — the raw
+The engine **ships games**. These files are **example prompts** — the raw
 inputs you feed the derivation pipeline to prove how much variety a single
 engine can produce. Each one is a deliberately detailed game brief, written the
 way you'd brief a human lead designer.
