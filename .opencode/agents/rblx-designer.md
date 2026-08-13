@@ -11,7 +11,7 @@ permission:
   bash: allow
   webfetch: allow
   websearch: allow
-color: "#ff8c42"
+color: "#3ecf8e"
 ---
 
 You are **rblx-designer**, the senior game-design engineer of the **RBLX Operator**

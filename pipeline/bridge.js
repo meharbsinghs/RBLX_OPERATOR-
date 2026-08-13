@@ -6,7 +6,7 @@
  *
  * Usage:
  *   rblx                                  # banner + help
- *   rblx banner                           # print the BUILDER BOI ASCII banner
+ *   rblx banner                           # print the BUILDER BOI Unicode block banner
  *   rblx doctor                           # toolchain + environment health check
  *   rblx init                             # scaffold .env, dirs
  *   node pipeline/bridge.js prompt                    # print the master derivation prompt
@@ -81,7 +81,7 @@ function usage() {
 RBLX Operator — autonomous prompt-to-Roblox-game engine, built on opencode
 
 Commands:
-  banner              Print the BUILDER BOI ASCII banner
+  banner              Print the BUILDER BOI Unicode block banner
   doctor              Toolchain + environment health check (opencode, rojo, git, keys)
   init                Scaffold .env and directories
   prompt              Print the master derivation prompt (pipeline/system_prompt.md)
@@ -113,9 +113,18 @@ Commands:
 `);
 }
 
-// Print the BUILDER BOI ASCII banner (from the pre-rendered banner or the
-// logo itself). Suppressed for non-TTY (CI) output unless requested.
+// Print the BUILDER BOI Unicode block banner. In a real terminal it renders
+// live at the current width (gray body, phosphor eyes) so it always fits any
+// terminal size — the pre-rendered banner.txt stays as the canonical non-TTY
+// asset. Suppressed for non-TTY (CI) output unless requested.
 function printBanner() {
+  if (process.stdout.isTTY) {
+    const width = process.stdout.columns || 84;
+    const cols = Math.min(Math.max(width - 2, 40), 110);
+    const color = !process.env.NO_COLOR && process.env.TERM !== "dumb";
+    console.log(ascii.banner({ cols, color }));
+    return;
+  }
   const saved = path.join(ROOT, "assets", "branding", "banner.txt");
   if (fs.existsSync(saved)) {
     console.log(fs.readFileSync(saved, "utf8"));

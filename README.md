@@ -78,7 +78,7 @@ no API keys, no .exe, no setup beyond Node.
 
 | Command | What it does |
 | --- | --- |
-| `rblx banner` | prints the BUILDER BOI ASCII banner |
+| `rblx banner` | prints the BUILDER BOI Unicode block banner |
 | `rblx doctor` | toolchain + environment health check |
 | `rblx design "<idea>"` | end-to-end design via the opencode rblx-designer agent → spec → config → verify |
 | `rblx newgame "<idea>"` | design a full game spec (DeepSeek or offline) and compile it |

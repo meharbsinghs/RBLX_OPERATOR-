@@ -26,7 +26,7 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
 if (-not (Get-Command rojo -ErrorAction SilentlyContinue)) {
     Write-Host "[studio] Rojo not found. Installing Rokit (Roblox toolchain manager) + Rojo..." -ForegroundColor Yellow
     Write-Host "        This fetches the official bootstrap from github.com/rojo-rbx/rokit." -ForegroundColor Yellow
-    Write-Host "        It can take a minute on first run — the window will pause until it finishes." -ForegroundColor Yellow
+    Write-Host "        It can take a minute on first run - the window will pause until it finishes." -ForegroundColor Yellow
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
     try {
         Invoke-RestMethod https://raw.githubusercontent.com/rojo-rbx/rokit/main/scripts/install.ps1 | Invoke-Expression
@@ -41,19 +41,21 @@ if (-not (Get-Command rojo -ErrorAction SilentlyContinue)) {
         [Environment]::SetEnvironmentVariable("PATH", "$RokitDir;" + [Environment]::GetEnvironmentVariable("PATH", "User"), "User")
     }
     if (-not (Test-Path "$Root\rokit.toml")) {
-        rokit init --yes 2>$null | Out-Null
+        rokit init
         if ($LASTEXITCODE -ne 0 -or -not (Test-Path "$Root\rokit.toml")) {
             Write-Host "[studio] Could not initialize the Rokit toolchain. Install Rojo manually from https://rojo.space, then re-run." -ForegroundColor Red
             exit 1
         }
     }
-    rokit add rojo-rbx/rojo | Out-Null
+    rokit trust rojo-rbx/rojo
+    if ($LASTEXITCODE -ne 0) { Write-Host "[studio] Could not trust rojo. Install Rojo manually from https://rojo.space, then re-run." -ForegroundColor Red; exit 1 }
+    rokit add rojo-rbx/rojo --force
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[studio] Could not add rojo to the toolchain. Install Rojo manually from https://rojo.space, then re-run." -ForegroundColor Red
         exit 1
     }
-    rokit install --yes
-    if ($LASTEXITCODE -ne 0) { rokit install | Out-Null }   # older rokit: no --yes flag
+    rokit install
+    if ($LASTEXITCODE -ne 0) { Write-Host "[studio] rokit install failed." -ForegroundColor Red; exit 1 }
     if (-not (Get-Command rojo -ErrorAction SilentlyContinue)) {
         Write-Host "[studio] Rojo installed but not on PATH in this session. Close and reopen the terminal, then re-run." -ForegroundColor Red
         exit 1
@@ -71,7 +73,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host ""
 Write-Host "[studio] Built RBLXOperator.rbxl" -ForegroundColor Green
 Write-Host "        Open it in Roblox Studio and press Play. That is the engine's reference game."
-Write-Host "        Design your own first with:  node pipeline/bridge.js newgame \"<idea>\""
+Write-Host "        Design your own first with:  node pipeline/bridge.js newgame '<idea>'"
 
 # --- 4. Live-sync + Open Cloud hints ----------------------------------------------
 if ($Serve) {

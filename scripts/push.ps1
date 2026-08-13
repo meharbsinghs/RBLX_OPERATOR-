@@ -14,7 +14,7 @@ param(
     [string]$RepoName = "RBLX_OPERATOR-",
     [string]$RepoUrl = "",
     [switch]$Private,
-    [switch]$Auto,        # non-interactive (CI / scripts — no Read-Host)
+    [switch]$Auto,        # non-interactive (CI / scripts - no Read-Host)
     [switch]$SkipVerify   # skip the verify gate (CI already ran it)
 )
 $ErrorActionPreference = "Stop"
@@ -34,7 +34,7 @@ if (-not $SkipVerify -and -not (Get-Command node -ErrorAction SilentlyContinue))
 # --- 2. Git: install via winget if missing -----------------------------------
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Host "[push] winget was not found — install Git for Windows manually from https://git-scm.com, then re-run." -ForegroundColor Red
+        Write-Host "[push] winget was not found - install Git for Windows manually from https://git-scm.com, then re-run." -ForegroundColor Red
         exit 1
     }
     Write-Host "[push] Git not found. Installing Git for Windows (this takes a minute)..." -ForegroundColor Yellow
@@ -46,7 +46,7 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     }
     # Refresh PATH from machine + user scopes so git is usable in this session.
     # Merge (not replace) so session-scoped entries like a version manager's
-    # node path survive — the verify gate below still needs node.
+    # node path survive - the verify gate below still needs node.
     $machine = [Environment]::GetEnvironmentVariable("Path", "Machine")
     $user = [Environment]::GetEnvironmentVariable("Path", "User")
     $env:Path = "$env:Path;$machine;$user"
@@ -156,10 +156,10 @@ if (-not (Test-RemoteOrigin)) {
         if ($LASTEXITCODE -eq 0) {
             $vis = if ($Private) { "--private" } else { "--public" }
             # The repo may already exist (created on github.com/new, or by a
-            # previous push) — link to it instead of failing on create.
+            # previous push) - link to it instead of failing on create.
             $existing = gh repo view $RepoName --json url -q .url 2>$null
             if ($LASTEXITCODE -eq 0 -and $existing) {
-                Write-Host "[push] Repo '$RepoName' already exists — linking origin to: $existing" -ForegroundColor Yellow
+                Write-Host "[push] Repo '$RepoName' already exists - linking origin to: $existing" -ForegroundColor Yellow
                 git remote add origin $existing
             }
             else {
