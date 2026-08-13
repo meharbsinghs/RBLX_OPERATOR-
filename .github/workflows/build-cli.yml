@@ -70,8 +70,7 @@ jobs:
             --notes "Automated build from main. These assets are overwritten on every push, so this release always holds the newest build." > /dev/null
           gh release upload continuous dist/rblx-operator-cli.zip dist/rblx-operator-plugin.luau --clobber
           echo "[release] assets uploaded"
-          id=$(gh release view continuous --json id -q .id)
-          gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/$id" -f make_latest=true > /dev/null
+          gh release edit continuous --latest
           echo "[release] marked latest — done"
 
       - name: Publish versioned release (on tags)
