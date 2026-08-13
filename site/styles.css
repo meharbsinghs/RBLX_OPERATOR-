@@ -1,14 +1,16 @@
 /* ============================================================================
    RBLX OPERATOR — site styles
    Design language: opencode.
-   Warm near-black canvas, cream text, one orange accent, hairline borders,
-   Inter + JetBrains Mono, terminal chrome. No gradients-rainbow, no slop.
+   Warm near-black canvas (#131010), cream text (#ebdbb2), one orange accent
+   (#ff8c42), hairline borders, Inter + JetBrains Mono, terminal chrome.
+   No gradients-rainbow, no slop.
    ========================================================================== */
 
 :root {
   --bg: #131010;              /* opencode warm black */
   --bg-2: #1a1615;
   --bg-3: #211c1b;
+  --bg-0: #0e0c0c;
   --line: rgba(235, 219, 178, 0.09);
   --line-2: rgba(235, 219, 178, 0.16);
   --text: #ebdbb2;            /* gruvbox cream */
@@ -90,22 +92,15 @@ code {
   letter-spacing: 1.5px;
   font-size: 14.5px;
 }
-.nav-links { display: flex; align-items: center; gap: 24px; font-size: 13.5px; }
-.nav-links a { color: var(--muted); transition: color 0.15s ease; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta {
-  background: var(--accent);
-  color: #1a0d04 !important;
-  font-weight: 700;
-  padding: 7px 16px;
-  border-radius: 7px;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-.nav-cta:hover { background: #ffa05c; transform: translateY(-1px); color: #1a0d04 !important; }
+.nav-links { display: flex; align-items: center; gap: 26px; font-size: 13.5px; }
+.nav-links a:not(.nav-gh) { color: var(--muted); transition: color 0.15s ease; }
+.nav-links a:not(.nav-gh):hover { color: var(--text); }
+.nav-gh { color: var(--muted); display: inline-flex; transition: color 0.15s ease; }
+.nav-gh:hover { color: var(--text); }
 
 /* ---------- hero ---------- */
 .hero {
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
   padding: 84px 24px 56px;
   text-align: center;
@@ -150,10 +145,10 @@ code {
 
 /* ---------- terminal ---------- */
 .terminal {
-  max-width: 700px;
+  max-width: 720px;
   margin: 0 auto 36px;
   text-align: left;
-  background: #0e0c0c;
+  background: var(--bg-0);
   border: 1px solid var(--line-2);
   border-radius: 12px;
   overflow: hidden;
@@ -178,13 +173,26 @@ code {
   color: var(--muted);
 }
 .terminal-body {
-  padding: 20px 22px;
+  padding: 18px 22px 20px;
   font-family: var(--mono);
   font-size: 13.5px;
-  line-height: 2;
-  min-height: 236px;
+  line-height: 1.65;
 }
+.t-ascii {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.22;
+  color: #cdbf96;
+  white-space: pre;
+  margin: 2px 0 16px;
+}
+.t-ascii span { display: block; opacity: 0; animation: asciiIn 0.35s ease forwards; }
+.t-ascii .accent { color: var(--accent); }
+.t-ascii .ok { color: var(--ok); }
+@keyframes asciiIn { to { opacity: 1; } }
+.t-cmd { margin: 8px 0; }
 .t-prompt { color: var(--accent); margin-right: 9px; font-weight: 700; }
+.t-line { color: var(--text); margin: 6px 0 6px 24px; white-space: pre-wrap; }
 .t-dim { color: var(--muted); }
 .t-ok { color: var(--ok); }
 .cursor { color: var(--accent); animation: blink 1s steps(1) infinite; }
@@ -249,6 +257,7 @@ code {
 }
 .section-title .prompt { color: var(--accent); font-family: var(--mono); margin-right: 8px; }
 .section-sub { color: var(--muted); max-width: 640px; margin-bottom: 40px; font-size: 15.5px; }
+.section-sub b { color: var(--text); font-weight: 600; }
 
 /* ---------- ships games ---------- */
 .ship-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
@@ -261,31 +270,6 @@ code {
 .ship-k { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 1px; }
 .ship h3 { font-size: 15.5px; margin: 6px 0 7px; }
 .ship p { font-size: 13.5px; color: var(--muted); }
-
-/* ---------- feature grid ---------- */
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
-.card {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  padding: 22px;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-}
-.card:hover {
-  border-color: var(--line-2);
-  transform: translateY(-2px);
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.4);
-}
-.card-k {
-  display: block;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.card h3 { font-size: 15.5px; margin-bottom: 8px; }
-.card p { font-size: 13.5px; color: var(--muted); }
 
 /* ---------- pipeline ---------- */
 .pipe { display: flex; align-items: stretch; gap: 14px; flex-wrap: wrap; }
@@ -303,6 +287,72 @@ code {
 .pipe-step h3 { font-size: 15px; margin: 7px 0; }
 .pipe-step p { font-size: 13px; color: var(--muted); }
 .pipe-arrow { align-self: center; color: var(--accent); font-family: var(--mono); font-size: 19px; }
+
+/* ---------- install ---------- */
+.install-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
+.install-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 26px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.install-card:hover {
+  border-color: rgba(255, 140, 66, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.45);
+}
+.install-os {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  border: 1px solid rgba(255, 140, 66, 0.35);
+  border-radius: 999px;
+  padding: 3px 10px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.install-card h3 { font-size: 17px; margin-bottom: 8px; }
+.install-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; }
+.install-note { font-size: 12.5px !important; margin: 12px 0 0 !important; }
+
+.code-block {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-0);
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.code-block code {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #f4dca0;
+  background: transparent;
+  border: 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.copy {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  background: var(--bg-3);
+  border: 0;
+  border-left: 1px solid var(--line-2);
+  padding: 0 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.copy:hover { color: var(--accent); background: #282220; }
+.copy.link { display: inline-flex; align-items: center; text-decoration: none; }
+.copy.done { color: var(--ok); }
 
 /* ---------- crew ---------- */
 .crew { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
@@ -323,40 +373,9 @@ code {
   color: var(--muted);
 }
 .crew-card h3 { font-size: 16px; margin: 7px 0 8px; display: flex; align-items: center; gap: 8px; }
-.op-logo { width: 18px; height: 18px; border-radius: 4px; object-fit: cover; }
 .crew-card p { font-size: 13px; color: var(--muted); }
-
-/* ---------- download ---------- */
-.dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; }
-.dl-card {
-  display: block;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  padding: 26px;
-  transition: all 0.15s ease;
-}
-.dl-card:hover { border-color: rgba(255, 140, 66, 0.55); transform: translateY(-2px); box-shadow: 0 20px 54px rgba(0, 0, 0, 0.45); }
-.dl-os {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  letter-spacing: 2px;
-  color: var(--accent);
-  border: 1px solid rgba(255, 140, 66, 0.35);
-  border-radius: 999px;
-  padding: 3px 10px;
-  display: inline-block;
-  margin-bottom: 12px;
-}
-.dl-card h3 { font-size: 17px; margin-bottom: 8px; }
-.dl-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
-.dl-card .btn { margin: 0 0 12px; }
-.dl-note {
-  display: block;
-  font-family: var(--mono);
-  font-size: 11.5px;
-  color: var(--muted);
-}
+.crew-card p b { color: var(--text); font-weight: 600; }
+.op-logo { width: 18px; height: 18px; border-radius: 4px; object-fit: cover; }
 
 /* ---------- footer ---------- */
 footer {
@@ -387,4 +406,6 @@ footer {
   .pipe-arrow { transform: rotate(90deg); }
   .hero { padding-top: 56px; }
   .hero-stats { gap: 26px; }
+  .terminal-body { padding: 14px 14px 16px; }
+  .t-ascii { font-size: 8.5px; }
 }

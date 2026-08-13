@@ -39,6 +39,7 @@ const { spawnSync } = require("child_process");
 const ROOT = path.join(__dirname, "..", "..");
 const PERSONA_PATH = path.join(__dirname, "engineer_persona.md");
 const GAMES_DIR = path.join(ROOT, "games");
+const { which, spawnCli } = require("../clitools");
 
 // The engineer brain lives in its own committed file. (Inline fallback so the
 // module never hard-crashes if the file is missing from a partial checkout.)
@@ -62,7 +63,9 @@ function getPersona() {
 
 function isAvailable() {
   try {
-    const res = spawnSync("opencode", ["--version"], { encoding: "utf8", timeout: 15000 });
+    const bin = which("opencode");
+    if (!bin) return false;
+    const res = spawnCli(bin, ["--version"], { encoding: "utf8", timeout: 15000 });
     return res.status === 0;
   } catch {
     return false;
@@ -75,13 +78,18 @@ function isAvailable() {
  * @returns {{ status: number|null, stdout: string, stderr: string }}
  */
 function runTask(task, { cwd = ROOT, model, agent, timeoutMs = 900000, persona = true } = {}) {
-  const content = persona ? `${getPersona()}\n\n---\n\nTASK:\n${task}` : task;
+  // A named opencode agent (e.g. rblx-designer) carries its own system prompt
+  // in .opencode/agents/ — don't double-stuff the persona into the message.
+  const effectivePersona = persona && !agent;
+  const content = effectivePersona ? `${getPersona()}\n\n---\n\nTASK:\n${task}` : task;
+  const bin = which("opencode");
+  if (!bin) throw new Error("opencode CLI not found on PATH — npm i -g opencode-ai");
   const args = ["run", "--format", "json", "--auto"];
   if (agent) args.push("--agent", agent);
   if (model) args.push("--model", model);
   args.push(content);
 
-  const res = spawnSync("opencode", args, {
+  const res = spawnCli(bin, args, {
     cwd,
     encoding: "utf8",
     timeout: timeoutMs,

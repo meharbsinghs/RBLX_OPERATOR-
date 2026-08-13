@@ -1,15 +1,21 @@
 {
   "name": "rblx-operator",
-  "version": "1.0.0",
-  "description": "RBLX Operator — free, open-source Roblox game engine. Ships with Zombie Rush: Greenwood Siege, a complete 10-wave survival shooter, and generates any game you can describe from a single prompt.",
+  "version": "1.1.0",
+  "description": "RBLX Operator — free, open-source Roblox game engine, built on opencode. Ships complete, balanced, playable Roblox games from a single prompt. Includes Zombie Rush: Greenwood Siege, a complete 10-wave survival shooter.",
   "license": "MIT",
   "private": true,
   "type": "commonjs",
+  "bin": {
+    "rblx": "pipeline/bridge.js"
+  },
   "engines": {
     "node": ">=18"
   },
   "scripts": {
+    "rblx": "node pipeline/bridge.js",
     "init": "node pipeline/bridge.js init",
+    "banner": "node pipeline/bridge.js banner",
+    "doctor": "node pipeline/bridge.js doctor",
     "newgame": "node pipeline/bridge.js newgame",
     "prompt": "node pipeline/bridge.js prompt",
     "asset": "node pipeline/bridge.js asset",
@@ -20,9 +26,6 @@
     "fix": "node pipeline/bridge.js fix",
     "operator": "node pipeline/bridge.js operator",
     "design": "node pipeline/bridge.js design",
-    "smoke": "node pipeline/bridge.js smoke",
-    "app:install": "cd app && npm install",
-    "app:start": "cd app && npx electron .",
-    "app:build": "cd app && npx electron-builder --win nsis portable --publish never"
+    "smoke": "node pipeline/bridge.js smoke"
   }
 }

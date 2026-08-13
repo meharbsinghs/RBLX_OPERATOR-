@@ -1,10 +1,14 @@
+#!/usr/bin/env node
 "use strict";
 
 /**
  * RBLX Operator — CLI orchestrator.
  *
  * Usage:
- *   node pipeline/bridge.js init                      # scaffold .env, dirs
+ *   rblx                                  # banner + help
+ *   rblx banner                           # print the BUILDER BOI ASCII banner
+ *   rblx doctor                           # toolchain + environment health check
+ *   rblx init                             # scaffold .env, dirs
  *   node pipeline/bridge.js prompt                    # print the master derivation prompt
  *   node pipeline/bridge.js newgame "<idea>"          # prompt -> GameSpec -> config.luau
  *   node pipeline/bridge.js newgame --spec out.json   # import a spec from ANY AI chat
@@ -25,16 +29,19 @@
  * derived from a prompt: the master derivation prompt
  * (pipeline/system_prompt.md) is the design interface — the
  * pipeline sends it to DeepSeek, and you can paste it into ANY AI chat and
- * import the resulting JSON with --spec. The OpenCode operator
- * (pipeline/operators/) is the same interface extended to an end-to-end game
- * design engineer: design -> compile -> verify -> test -> fix, in a loop.
+ * import the resulting JSON with --spec. The system is built on top of
+ * opencode: the rblx-designer agent (.opencode/agents/) is the design brain,
+ * the plugin (.opencode/plugins/) arms engine tools, and `design` / `operator`
+ * run the end-to-end loop: design -> compile -> verify -> test -> fix.
  */
 
 const fs = require("fs");
 const path = require("path");
-const { execFileSync } = require("child_process");
+const { execFileSync, spawnSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
+const ascii = require("./ascii_banner");
+const { which, spawnCli } = require("./clitools");
 const codegen = require("./codegen");
 const meshy = require("./meshy_client");
 const registry = require("./registry");
@@ -71,9 +78,11 @@ function loadEnv() {
 
 function usage() {
   console.log(`
-RBLX Operator — autonomous prompt-to-Roblox-game engine
+RBLX Operator — autonomous prompt-to-Roblox-game engine, built on opencode
 
 Commands:
+  banner              Print the BUILDER BOI ASCII banner
+  doctor              Toolchain + environment health check (opencode, rojo, git, keys)
   init                Scaffold .env and directories
   prompt              Print the master derivation prompt (pipeline/system_prompt.md)
                       — the design interface. Works with ANY AI model.
@@ -96,12 +105,89 @@ Commands:
                       Scaffold a game-type pack under gametypes/<slug>/ and
                       register it — the unbounded-genre mechanism (GAME_TYPES.md).
   plugin              Print the Studio Craft plugin build + install steps
-  design "<idea>"     End-to-end design loop via the OpenCode engineer:
+  design "<idea>"     End-to-end design loop via the rblx-designer agent (opencode):
                       idea -> spec JSON -> config.luau -> verify gate
-  operator "<task>"   Engineering loop via the OpenCode engineer (runtime edits)
+  operator "<task>"   Engineering loop via the rblx-designer agent (runtime edits)
   smoke ["<idea>"]    One-command offline end-to-end proof: prompt -> spec ->
-                      config -> verify. Zero keys, zero OpenCode.
+                      config -> verify. Zero keys, zero opencode.
 `);
+}
+
+// Print the BUILDER BOI ASCII banner (from the pre-rendered banner or the
+// logo itself). Suppressed for non-TTY (CI) output unless requested.
+function printBanner() {
+  const saved = path.join(ROOT, "assets", "branding", "banner.txt");
+  if (fs.existsSync(saved)) {
+    console.log(fs.readFileSync(saved, "utf8"));
+  } else {
+    console.log(ascii.banner());
+  }
+}
+
+function cmdBanner() {
+  printBanner();
+}
+
+function cmdDoctor() {
+  const checks = [];
+  const check = (name, ok, detail) => checks.push({ name, ok, detail });
+
+  // node
+  check("node", true, process.version);
+
+  // opencode CLI + agent + auth
+  const ocBin = which("opencode");
+  let ocVer = null;
+  if (ocBin) {
+    try {
+      const v = spawnCli(ocBin, ["--version"], { encoding: "utf8", timeout: 15000 });
+      if (v.status === 0) ocVer = (v.stdout || "").trim();
+    } catch {
+      /* ignore */
+    }
+  }
+  check("opencode", Boolean(ocVer), ocVer ? `v${ocVer} (${ocBin})` : "not found — npm i -g opencode-ai");
+  if (ocVer) {
+    const agentList = spawnCli(ocBin, ["agent", "list"], { encoding: "utf8", timeout: 20000 });
+    const hasDesigner = /rblx-designer/.test((agentList.stdout || "") + (agentList.stderr || ""));
+    check("rblx-designer agent", hasDesigner, hasDesigner ? "registered (.opencode/agents/)" : "missing — run: opencode agent create");
+    const auth = spawnCli(ocBin, ["auth", "list"], { encoding: "utf8", timeout: 20000 });
+    const authed = /credentials|●/.test((auth.stdout || "") + (auth.stderr || ""));
+    check("opencode auth", authed, authed ? "provider credential found" : "run: opencode auth login");
+  }
+
+  // rojo
+  const rojoBin = which("rojo");
+  const rojo = rojoBin ? spawnCli(rojoBin, ["--version"], { encoding: "utf8", timeout: 15000 }) : null;
+  check("rojo", rojo && rojo.status === 0, rojo && rojo.status === 0 ? (rojo.stdout || "").trim().split(/\s+/)[0] : "not found — https://rojo.space (scripts/setup.bat installs it)");
+
+  // git / gh
+  const gitBin = which("git");
+  const git = gitBin ? spawnCli(gitBin, ["--version"], { encoding: "utf8", timeout: 15000 }) : null;
+  check("git", git && git.status === 0, git && git.status === 0 ? (git.stdout || "").trim().split(/\s+/)[0] : "not found — https://git-scm.com");
+  const ghBin = which("gh") || (fs.existsSync("C:\\Program Files\\GitHub CLI\\gh.exe") ? "C:\\Program Files\\GitHub CLI\\gh.exe" : null);
+  check("gh (GitHub CLI)", Boolean(ghBin), ghBin ? "installed" : "not found — https://cli.github.com");
+
+  // .env keys
+  loadEnv();
+  const keys = ["DEEPSEEK_API_KEY", "MESHY_API_KEY", "OPEN_CLOUD_API_KEY"].filter((k) => process.env[k]);
+  check(".env keys", keys.length > 0, keys.length ? keys.join(", ") : "none set — everything still works offline (newgame --offline)");
+
+  // Roblox Studio
+  const studioCandidates = [
+    path.join(process.env.LOCALAPPDATA || "", "Roblox", "Versions"),
+    "C:\\Program Files (x86)\\Roblox",
+  ];
+  const studio = studioCandidates.some((p) => { try { return fs.readdirSync(p).length > 0; } catch { return false; } });
+  check("Roblox Studio", studio, studio ? "installed" : "not found — install from https://www.roblox.com/create");
+
+  const pad = Math.max(...checks.map((c) => c.name.length));
+  console.log("\n[rblx] doctor — toolchain report");
+  for (const c of checks) {
+    const mark = c.ok ? "✓" : "✗";
+    console.log(`  ${mark} ${c.name.padEnd(pad)}  ${c.detail}`);
+  }
+  console.log("\n[rblx] Next: rblx newgame \"<idea>\"  or  rblx design \"<idea>\" (opencode brain)");
 }
 
 function cmdInit() {
@@ -340,9 +426,9 @@ async function cmdOperator(args) {
     process.exit(1);
   }
   const model = process.env.OPENCODE_MODEL || undefined;
-  const agent = process.env.OPENCODE_AGENT || undefined;
-  console.log(`[operator] OpenCode running: ${task}`);
-  console.log(`[operator] model=${model || "default"} agent=${agent || "default"} cwd=${opencode.ROOT}`);
+  const agent = process.env.OPENCODE_AGENT || "rblx-designer";
+  console.log(`[operator] opencode running: ${task}`);
+  console.log(`[operator] model=${model || "default"} agent=${agent} cwd=${opencode.ROOT}`);
   const res = opencode.runTask(task, { model, agent });
   if (res.status !== 0) {
     console.error(`[operator] OpenCode exited ${res.status}`);
@@ -364,9 +450,9 @@ async function cmdDesign(args) {
     process.exit(1);
   }
   const model = process.env.OPENCODE_MODEL || undefined;
-  const agent = process.env.OPENCODE_AGENT || undefined;
-  console.log(`[design] OpenCode engineer designing: ${idea}`);
-  console.log(`[design] model=${model || "default"} agent=${agent || "default"} — this can take a few minutes.`);
+  const agent = process.env.OPENCODE_AGENT || "rblx-designer";
+  console.log(`[design] rblx-designer (opencode) designing: ${idea}`);
+  console.log(`[design] model=${model || "default"} agent=${agent} — this can take a few minutes.`);
   const report = await opencode.designGame(idea, { model, agent });
   console.log("\n--- engineer report ---");
   console.log(report.log);
@@ -502,8 +588,15 @@ async function cmdSmoke(args) {
 
 async function main() {
   loadEnv();
+  const quiet = process.argv.includes("--quiet");
   const [cmd, ...args] = process.argv.slice(2);
+  if (!quiet && process.stdout.isTTY && cmd && cmd !== "banner") {
+    printBanner();
+  }
   switch (cmd) {
+    case undefined: printBanner(); usage(); break;
+    case "banner": cmdBanner(); break;
+    case "doctor": cmdDoctor(); break;
     case "init": cmdInit(); break;
     case "newgame": await cmdNewGame(args); break;
     case "asset": await cmdAsset(args); break;

@@ -28,7 +28,7 @@ everything, and runs the release loop. This is the command manual.
 5. BUILD     rojo build default.project.json -o RBLXOperator.rbxl
 6. PLAYTEST  Studio + Craft plugin (devlog console, lighting, asset inject).
 7. FIX       crash log / test output → autofix.js → Operator patches → 2-6.
-8. SHIP      push → CI (verify + smoke + Build EXE) → Pages site updates.
+8. SHIP      push → CI (verify + smoke + Build CLI) → rolling release zip + Pages site update.
 ```
 
 ## New genre in one session

@@ -14,8 +14,8 @@ param(
     [string]$RepoName = "RBLX_OPERATOR-",
     [string]$RepoUrl = "",
     [switch]$Private,
-    [switch]$Auto,        # non-interactive: used by the desktop app (no Read-Host)
-    [switch]$SkipVerify   # used by the desktop app, which already ran the gate
+    [switch]$Auto,        # non-interactive (CI / scripts — no Read-Host)
+    [switch]$SkipVerify   # skip the verify gate (CI already ran it)
 )
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
@@ -25,8 +25,7 @@ Write-Host ""
 Write-Host "=== RBLX Operator: GitHub push ===" -ForegroundColor Cyan
 
 # --- 1. Node.js (needed for the verify gate) --------------------------------
-# The desktop app bundles its own Node and passes -SkipVerify, so a machine
-# without system Node can still push.
+# Scripted flows (CI) pass -SkipVerify after running the gate themselves.
 if (-not $SkipVerify -and -not (Get-Command node -ErrorAction SilentlyContinue)) {
     Write-Host "[push] Node.js not found. Install from https://nodejs.org, then re-run." -ForegroundColor Red
     exit 1
@@ -65,7 +64,7 @@ if (Test-Path "$Root\.env") {
 
 # --- 4. Verify gate -----------------------------------------------------------
 if ($SkipVerify) {
-    Write-Host "[push] Verify gate skipped (-SkipVerify) - the desktop app already ran it with its bundled runtime." -ForegroundColor Yellow
+    Write-Host "[push] Verify gate skipped (-SkipVerify) - it was already run upstream." -ForegroundColor Yellow
 }
 else {
     Write-Host "[push] Running the verification gate: node pipeline/bridge.js verify"
@@ -141,21 +140,15 @@ if (-not (Test-RemoteOrigin)) {
             Write-Host "=== LINK YOUR GITHUB ACCOUNT ===" -ForegroundColor Cyan
             Write-Host "A browser will open with a one-time code. Log in, then paste the code back here." -ForegroundColor Cyan
             Write-Host ""
-            if ($Auto) {
-                # Desktop app: no interactive input - run the device flow; gh
-                # prints the code + opens the browser, then polls until done.
-                gh auth login --hostname github.com --git-protocol https --web
-            }
-            else {
-                # Same flow from a terminal - also fully automatic (no prompts).
-                gh auth login --hostname github.com --git-protocol https --web
-            }
+            # Device flow: gh prints a one-time code + opens the browser, then
+            # polls until you complete the login. Automatic, no prompts.
+            gh auth login --hostname github.com --git-protocol https --web
             gh auth status 2>$null | Out-Null
             if ($LASTEXITCODE -ne 0) {
                 Write-Host "[push] GitHub login was not completed." -ForegroundColor Red
                 Write-Host "       Re-run this script, or in any terminal run:  gh auth login" -ForegroundColor Yellow
                 if ($Auto) {
-                    Write-Host "       (In the desktop app, use the 'Link GitHub account' button, then push again.)" -ForegroundColor Yellow
+                    Write-Host "       Re-run in a terminal where the browser flow can complete, or run:  gh auth login" -ForegroundColor Yellow
                     exit 1
                 }
             }
@@ -190,8 +183,8 @@ if (-not (Test-RemoteOrigin)) {
     if (-not (Test-RemoteOrigin)) {
         if ($Auto) {
             Write-Host "[push] No authenticated GitHub CLI and interactive input is unavailable here." -ForegroundColor Yellow
-            Write-Host "       In the desktop app: use the 'Link GitHub account' button first, then push again." -ForegroundColor Yellow
-            Write-Host "       In a terminal: create a repo at https://github.com/new and run:" -ForegroundColor Yellow
+            Write-Host "       In a terminal: run  gh auth login, then push again; or create a repo at" -ForegroundColor Yellow
+            Write-Host "       https://github.com/new and run:" -ForegroundColor Yellow
             Write-Host "         scripts\push.ps1 -RepoUrl https://github.com/<you>/$RepoName.git" -ForegroundColor Yellow
             exit 1
         }

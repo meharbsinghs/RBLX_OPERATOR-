@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // RBLX Operator is built on top of opencode.
+  // - The game-design brain is the `rblx-designer` agent (.opencode/agents/rblx-designer.md).
+  // - Engine tools (rblx_verify / rblx_compile / rblx_build / rblx_open) are
+  //   registered by the plugin in .opencode/plugins/rblx-operator.js.
+  // Run it:  opencode   -> pick the rblx-designer agent, or
+  //          opencode run --agent rblx-designer "a neon extraction shooter"
+  // The CLI wraps this:  node pipeline/bridge.js design "<idea>"
+}

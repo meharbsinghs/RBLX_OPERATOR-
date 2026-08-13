@@ -5,11 +5,12 @@
  *
  * Reads assets/branding/logo.png (the committed RBLX Operator mark) and writes:
  *   assets/branding/icon.ico     16/32/48/128/256 multi-size Windows icon
- *   assets/branding/logo-256.png 256px square PNG for the site + desktop app
+ *   assets/branding/logo-256.png 256px square PNG for the site + CLI branding
  *
- * CI runs this before packaging (see .github/workflows/build-exe.yml and
- * deploy-site.yml), so the .exe and the website always ship the current logo.
- * Swap assets/branding/logo.png for a new mark and rebuild — no other changes.
+ * CI runs this before packaging (see .github/workflows/build-cli.yml and
+ * deploy-site.yml), so the downloads and the website always ship the current
+ * logo. Swap assets/branding/logo.png for a new mark and rebuild — no other
+ * changes.
  */
 
 const fs = require("fs");

@@ -13,8 +13,8 @@ the game by describing it.
 
 | Requirement | Needed for | Notes |
 |---|---|---|
-| **Node.js ≥ 18** | The pipeline (CLI, design, assets, fixes) | [nodejs.org](https://nodejs.org); `node --version` to check |
-| **Desktop app** (optional) | Everything, no terminal | The whole system as an .exe; bundles Node — see §9b |
+| **Node.js ≥ 18** | The CLI (design, assets, fixes) | [nodejs.org](https://nodejs.org); `node --version` to check |
+| **opencode** (optional) | The design brain (`rblx-designer` agent) | `npm i -g opencode-ai`; free Zen tier — see §8 |
 | **Rojo** (optional for play) | Building the `.rbxl` game file | [rojo.space](https://rojo.space); `scripts/studio.ps1` installs it via Rokit |
 | **Roblox Studio** | Playing / testing the game | Free |
 | **API keys** (optional) | AI design, 3D assets, auto-uploads | Everything works with zero keys |
@@ -204,13 +204,14 @@ node pipeline/bridge.js fix --log logs/runtime_test.log   # auto-fix failures
 
 ---
 
-## 8. The engineer loop (OpenCode operator)
+## 8. The engineer loop (opencode)
 
-OpenCode (`npm i -g opencode-ai`) is an optional **second brain**: a terminal
-coding agent that can work end-to-end on this repo with any model you
-configure (`opencode auth login --provider deepseek`). It reads its role — the
-full engine contract, the schema, the verify gate — from
-`pipeline/operators/engineer_persona.md`, which is prepended to every task.
+RBLX Operator is **built on top of opencode** (`npm i -g opencode-ai`, then
+`opencode auth login` — the free Zen tier works, or DeepSeek / Claude / GPT /
+local models). Running `opencode` in this repo gives you the **rblx-designer
+agent** (`.opencode/agents/`) — the design brain — plus engine tools
+(`rblx_verify`, `rblx_compile`, `rblx_build`, `rblx_open`) armed by the plugin
+(`.opencode/plugins/`).
 
 **Design loop — one command, prompt to game:**
 
@@ -218,11 +219,16 @@ full engine contract, the schema, the verify gate — from
 node pipeline/bridge.js design "a neon extraction shooter set on a derelict space station"
 ```
 
-The engineer derives the complete GameSpec JSON (using
-`pipeline/system_prompt.md`), the pipeline compiles it into
-`src/shared/config.luau`, and the Luau gate runs. It prints a report with the
-spec path, the config path, the roster sizes, and any gate failures. This is
-Route A/B with a human engineer — except the engineer is an agent.
+The agent derives the complete GameSpec JSON (using
+`pipeline/system_prompt.md` as its system prompt), the pipeline compiles it
+into `src/shared/config.luau`, and the Luau gate runs. It prints a report with
+the spec path, the config path, the roster sizes, and any gate failures.
+
+Directly in opencode, the same design is one message:
+
+```bash
+opencode run --agent rblx-designer "a dark zombie survival in a cursed mall, 10 waves"
+```
 
 **Engineering loop — runtime changes:**
 
@@ -333,39 +339,36 @@ GitHub Actions will run CI automatically: **Luau + JS validation** and an
 
 ---
 
-## 9b. The desktop app (.exe)
+## 9b. Install the CLI (no build needed)
 
-The entire system is also packaged as a Windows desktop app — **Roblox
-Operator Studio** — so users can make games with **no terminal and no
-Node.js**: the app bundles the engine and its own Node runtime. The only
-thing a user still installs is Roblox Studio (and Rojo for the build step —
-the app prints the one-line install, or run `scripts/studio.ps1`).
+RBLX Operator is a **terminal CLI** — no .exe, no desktop app, no bundled
+runtimes. Two ways to get it:
 
-**Getting the .exe (free, no build needed):**
+**Option A — npm (recommended):**
 
-1. Push the repo — every push runs the **Build EXE** workflow on GitHub
-   Actions. Open **Actions** → *Build EXE* → newest run → **Artifacts** →
-   download `rblx-operator-windows`.
-2. For a permanent download: tag a release (`git tag v1.0.0` then
-   `git push --tags`) — the installer + portable .exe are attached to the
-   **Releases** page.
-3. Or build locally: `npm run app:install` then `npm run app:build`
-   (output: `app/dist/`). Run from source anytime with `npm run app:start`.
+```bash
+npm install -g rblx-operator    # the rblx CLI
+npm install -g opencode-ai      # the operator (design brain) — free Zen tier
+rblx doctor                     # check opencode, Rojo, Studio, keys
+```
 
-**What it does:**
+**Option B — zip:** every push to `main` packages the whole engine into
+`rblx-operator-cli.zip` on the **continuous** release — the website's download
+buttons always point there. Unzip, double-click `scripts\setup.bat`, done.
 
-| Tab | What it does |
-|---|---|
-| 🎨 **Design** | Type a game idea; mode = OpenCode engineer loop (`design`) / DeepSeek (`newgame`) / offline (zero keys) / import a spec from any AI chat (`--spec`) |
-| 🧪 **Verify** | Full Luau + JS gate, end-to-end `smoke`, and one-click `rojo build` → opens in Roblox Studio |
-| 🚀 **Publish** | Link your GitHub account (browser + one-time code), create the repo & push — same safe gate as §9 |
-| 📁 **Projects** | Every design you've made (`games/<name>/spec.json`) — recompile any one |
-| ⚙️ **Settings** | API keys → written to `.env` (gitignored) |
+```bash
+# Releases → continuous → rblx-operator-cli.zip
+unzip rblx-operator-cli.zip
+cd rblx-operator-cli
+setup.bat                      # or: node pipeline/bridge.js doctor
+```
 
-**Where your work lives:** the packaged app seeds a per-user workspace at
-`%APPDATA%\RBLX Operator\workspace` — games, `.env` keys, logs and
-the generated `.rbxl` all live there, and the installed files are never
-touched. In source mode (`npm run app:start`) it operates on the repo itself.
+**Option C — from source:** clone the repo, `npm install` (zero deps actually
+— the pipeline is pure Node), then `node pipeline/bridge.js doctor`.
+
+Once installed, `rblx` is an alias for `node pipeline/bridge.js` — every
+command in this manual works either way. `rblx banner` prints the BUILDER BOI
+ASCII mascot; `rblx doctor` verifies the whole toolchain in one screen.
 
 ---
 
@@ -406,7 +409,7 @@ patch it; or regenerate the spec from a prompt.
 **"Can it make a racing game?"**
 The engine is an action-shooter runtime — it derives survival, extraction,
 defense, arena and boss-hunt games out of the box. A genuinely different genre
-needs new systems: brief the OpenCode engineer (`operator "<task>"`) to add
+needs new systems: brief the rblx-designer agent (`operator "<task>"`) to add
 them, following the existing module conventions.
 
 **"What does `smoke` do?"**
@@ -417,11 +420,12 @@ gate — one command that proves the pipeline end to end. CI runs it on every
 push. Pass a prompt to smoke-test a different idea:
 `smoke "a grim medieval defense game"`.
 
-**"`design` says OpenCode isn't installed."**
-That's expected — OpenCode is optional. `npm i -g opencode-ai`, then
-`opencode auth login --provider deepseek` (or any provider). On Windows,
-OpenCode needs Git Bash: set `OPENCODE_GIT_BASH_PATH` in `.env`. Or just use
-Route A (`newgame`) / Route B (`--spec`) — the design is the same interface.
+**"`design` says opencode isn't installed."**
+`npm i -g opencode-ai`, then `opencode auth login` (free Zen tier included;
+DeepSeek/Claude/GPT/local models also work). On Windows, opencode may need
+Git Bash: set `OPENCODE_GIT_BASH_PATH` in `.env`. Without opencode, use Route
+A (`newgame`) / Route B (`--spec`) / offline — the design is the same
+interface; only the brain changes.
 
 **Assets look blocky.**
 Procedural models are the zero-key baseline. Generate bespoke meshes with
