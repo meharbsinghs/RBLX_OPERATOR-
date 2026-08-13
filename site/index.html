@@ -15,6 +15,8 @@
 </head>
 <body>
 
+  <div class="noise" aria-hidden="true"></div>
+
   <header class="nav">
     <a class="nav-brand" href="#top">
       <img src="logo.png" alt="RBLX Operator logo" class="nav-logo" />
@@ -147,23 +149,23 @@
       <p class="section-sub">
         A terminal CLI built on top of <b>opencode</b> — the open-source AI
         coding agent. No accounts, no keys, no .exe. Node 18+ and Roblox Studio
-        are the only prerequisites.
+        are the only prerequisites. Windows, macOS and Linux.
       </p>
 
       <div class="install-grid">
         <div class="install-card">
-          <span class="install-os">QUICKEST — NPM</span>
-          <h3>Install the rblx CLI</h3>
-          <p>One command, global. Then design your first game.</p>
+          <span class="install-os">QUICKEST — DOWNLOAD</span>
+          <h3>Get the rblx CLI</h3>
+          <p>Download the whole engine as a zip, run <code>setup.bat</code> — done.</p>
           <div class="code-block">
-            <code>npm install -g rblx-operator</code>
-            <button class="copy" data-copy="npm install -g rblx-operator" aria-label="Copy">copy</button>
+            <code>rblx-operator-cli.zip → setup.bat</code>
+            <a class="copy link" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-cli.zip">download</a>
           </div>
           <div class="code-block">
             <code>rblx doctor</code>
             <button class="copy" data-copy="rblx doctor" aria-label="Copy">copy</button>
           </div>
-          <p class="install-note">Verify opencode, Rojo, Studio and keys are ready.</p>
+          <p class="install-note">Verifies opencode, Rojo, Studio and keys in one screen. Needs Node 18+.</p>
         </div>
 
         <div class="install-card">
@@ -181,13 +183,14 @@
         </div>
 
         <div class="install-card">
-          <span class="install-os">NO NPM? — ZIP</span>
-          <h3>Download the CLI bundle</h3>
-          <p>The whole engine as a zip — run <code>setup.bat</code> and you're ready.</p>
+          <span class="install-os">DEVELOPERS — SOURCE</span>
+          <h3>Install from source</h3>
+          <p>Clone the repo and link the CLI globally (npm publishing is on the roadmap).</p>
           <div class="code-block">
-            <code>rblx-operator-cli.zip → setup.bat</code>
-            <a class="copy link" href="https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-cli.zip">download</a>
+            <code>git clone … && npm install -g .</code>
+            <button class="copy" data-copy="npm install -g ." aria-label="Copy">copy</button>
           </div>
+          <p class="install-note">Now <code>rblx</code> is on your PATH. Run <code>opencode auth login</code> once for the design brain.</p>
         </div>
 
         <div class="install-card">

@@ -1,11 +1,12 @@
 "use strict";
 
 /**
- * OpenCode sub-operator (https://opencode.ai — open-source terminal AI agent).
+ * opencode operator (https://opencode.ai — open-source terminal AI agent).
  *
- * The OpenCode operator is the engine's *second brain*: a plug-in game design
- * engineer that can work end-to-end on the repo with whatever model it is
- * configured with (DeepSeek, Claude, GPT, local models…).
+ * RBLX Operator is built on top of opencode. The rblx-designer agent
+ * (.opencode/agents/) is the design brain; this module drives it with any
+ * model the user authenticates (DeepSeek, Claude, GPT, local models, or the
+ * free OpenCode Zen tier).
  *
  * Two modes:
  *
@@ -27,9 +28,9 @@
  *   node pipeline/bridge.js operator "add a melee weapon system"
  *
  * Env (see .env.example):
- *   OPENCODE_MODEL          model in provider/model form (default: deepseek/deepseek-chat)
- *   OPENCODE_AGENT          agent to use (e.g. "build")
- *   OPENCODE_GIT_BASH_PATH  Windows only — path to git-bash.exe (opencode requires it)
+ *   OPENCODE_MODEL          model in provider/model form (empty = opencode's configured default)
+ *   OPENCODE_AGENT          agent to use (default: rblx-designer)
+ *   OPENCODE_GIT_BASH_PATH  Windows only — path to git-bash.exe if opencode needs it
  */
 
 const fs = require("fs");

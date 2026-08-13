@@ -49,6 +49,7 @@ function decodePng(buf) {
     pos += 12 + len;
   }
   if (!width || !height || bitDepth !== 8) throw new Error("unsupported PNG (need 8-bit)");
+  if (data[12] !== 0) throw new Error("interlaced PNG not supported");
   if (colorType === 3 && !palette) throw new Error("palette PNG without PLTE");
 
   const channels = colorType === 6 ? 4 : colorType === 2 ? 3 : colorType === 3 ? 1 : 1;

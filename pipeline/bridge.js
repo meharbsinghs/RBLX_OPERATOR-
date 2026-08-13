@@ -37,7 +37,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execFileSync, spawnSync } = require("child_process");
+const { execFileSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
 const ascii = require("./ascii_banner");

@@ -15,9 +15,10 @@ const { spawnSync } = require("child_process");
 
 /** Find a CLI on PATH (Windows: also .cmd/.exe/.bat candidates). Returns an absolute path or null. */
 function which(name) {
+  // Windows PATHEXT resolves .EXE before .CMD — mirror that order.
   const candidates =
     process.platform === "win32"
-      ? [name + ".cmd", name + ".exe", name + ".bat", name]
+      ? [name + ".exe", name + ".cmd", name + ".bat", name]
       : [name];
   const paths = (process.env.PATH || "").split(path.delimiter).filter(Boolean);
   for (const c of candidates) {
@@ -52,8 +53,10 @@ function shimTarget(cmdPath) {
     return null;
   }
   const dir = path.dirname(cmdPath);
-  const tokenRe = /"([^"]*(?:%dp0%|%~dp0)[^"]*\.(?:exe|cmd|bat))"/gi;
-  const plainRe = /"([^"]+\.exe)"/g;
+  // npm >= 7 shims point at a real binary: an .exe (opencode) or a .js run by
+  // node (e.g. a CLI whose bin entry is a script). Match both.
+  const tokenRe = /"([^"]*(?:%dp0%|%~dp0)[^"]*\.(?:exe|cmd|bat|js))"/gi;
+  const plainRe = /"([^"]+\.(?:exe|js))"/g;
   let m;
   let target = null;
   while ((m = tokenRe.exec(txt))) target = m[1];
@@ -68,24 +71,23 @@ function shimTarget(cmdPath) {
 
 /**
  * spawnSync a CLI that may be an npm .cmd shim. Returns the spawnSync result.
+ * .js shim targets are run through the current node binary.
  * @param {string} bin   resolved path from which() (or any path)
  * @param {string[]} args
  * @param {object} opts  passed through to spawnSync
  */
 function spawnCli(bin, args, opts = {}) {
   let target = bin;
-  let useArgs = args;
   if (process.platform === "win32" && /\.(cmd|bat)$/i.test(bin)) {
     const t = shimTarget(bin);
-    if (t) {
-      target = t;
-    } else {
-      // No resolvable target — route through cmd.exe with careful quoting.
-      const quoted = args.map((a) => `"${String(a).replace(/"/g, '\\"')}"`).join(" ");
-      return spawnSync("cmd.exe", ["/d", "/s", "/c", `"${bin}" ${quoted}`], opts);
-    }
+    if (t) target = t;
+    // else: leave bin as-is; spawnSync can run .cmd/.bat files via cmd.exe on
+    // modern Node, and the fallback below is only reached for exotic shims.
   }
-  return spawnSync(target, useArgs, opts);
+  if (/\.[j]s$/i.test(target)) {
+    return spawnSync(process.execPath, [target, ...args], opts);
+  }
+  return spawnSync(target, args, opts);
 }
 
 module.exports = { which, shimTarget, spawnCli };

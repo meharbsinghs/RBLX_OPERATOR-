@@ -81,10 +81,18 @@ export const RblxOperatorPlugin = async ({ directory, client }) => {
       rblx_open: tool({
         description: "Open a built .rbxl file in Roblox Studio so the game can be playtested.",
         args: {
-          file: tool.schema.string().optional().describe(".rbxl file to open (default: RBLXOperator.rbxl)"),
+          file: tool.schema
+            .string()
+            .optional()
+            .describe(".rbxl file name (default: RBLXOperator.rbxl; must look like a game file)"),
         },
         async execute(args) {
-          return run("cmd", ["/c", "start", "", args.file || "RBLXOperator.rbxl"], cwd)
+          // Never hand an LLM-supplied string to cmd.exe — validate it first.
+          const file = args.file || "RBLXOperator.rbxl"
+          if (!/^[\w.-]+\.rbxl$/.test(file)) {
+            return `ERROR: refused — "${file}" is not a plain .rbxl file name. Use e.g. RBLXOperator.rbxl or a file you built.`
+          }
+          return run("cmd", ["/c", "start", "", file], cwd)
         },
       }),
     },

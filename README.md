@@ -50,11 +50,16 @@
 
 ## Quick start
 
-Requires [Node.js 18+](https://nodejs.org), [Roblox Studio](https://www.roblox.com/create), and [opencode](https://opencode.ai) (one command):
+Requires [Node.js 18+](https://nodejs.org), [Roblox Studio](https://www.roblox.com/create), and [opencode](https://opencode.ai):
 
 ```bash
-npm install -g opencode-ai   # opencode (once; `opencode auth login` for any provider — free Zen tier included)
-npm install -g rblx-operator # rblx CLI  — or download the zip: Releases → rblx-operator-cli.zip → setup.bat
+# 1. The operator (once): opencode — free Zen tier included, any provider works
+npm install -g opencode-ai
+opencode auth login
+
+# 2. The rblx CLI — download the zip (Releases → rblx-operator-cli.zip) and run setup.bat,
+#    or install from source:
+npm install -g .
 ```
 
 Design and ship a game:
@@ -121,10 +126,10 @@ specs). `rblx smoke` proves the whole pipeline end-to-end.
 
 | Option | How |
 | --- | --- |
-| npm (recommended) | `npm install -g rblx-operator` |
-| zip | [rblx-operator-cli.zip](https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-cli.zip) → run `setup.bat` |
+| zip (recommended) | [rblx-operator-cli.zip](https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-cli.zip) → run `setup.bat` |
+| from source | `git clone … && npm install -g .` → `rblx` on your PATH (`npm publish` on the roadmap) |
 | Roblox Studio plugin | [rblx-operator-plugin.luau](https://github.com/meharbsinghs/RBLX_OPERATOR-/releases/latest/download/rblx-operator-plugin.luau) — drag into Studio (playtest console, lighting moods, Meshy injection) |
-| Source | clone + `npm install` + `rblx doctor` |
+| CLI reference | `rblx doctor` after any install |
 
 ## The crew
 
