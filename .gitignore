@@ -1,6 +1,9 @@
 # Environment / secrets
 .env
 
+# Interactive console first-run state
+.rblx/
+
 # Node
 node_modules/
 

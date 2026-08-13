@@ -23,8 +23,9 @@
   --line-2: rgba(253, 252, 252, 0.20);
   --text: #fdfcfc;
   --muted: #9a9898;
-  --accent: #3ecf8e;              /* phosphor green — the only accent */
+  --accent: #3ecf8e;              /* phosphor green — the only UI accent */
   --accent-dim: rgba(62, 207, 142, 0.14);
+  --char-accent: #f8a808;         /* logo orange — BUILDER BOI's eyes/visor */
   --mono: "IBM Plex Mono", "Berkeley Mono", "JetBrains Mono", "Cascadia Code",
           Consolas, "SF Mono", Menlo, monospace;
 }
@@ -191,7 +192,7 @@ code {
   margin: 2px 0 16px;
 }
 .t-ascii span { display: block; opacity: 0; animation: asciiIn 0.35s ease forwards; }
-.t-ascii .accent { color: var(--accent); }
+.t-ascii .accent { color: var(--char-accent); }  /* BOI eyes match the logo, not the UI accent */
 .t-ascii .ok { color: var(--accent); }
 @keyframes asciiIn { to { opacity: 1; } }
 .t-cmd { margin: 8px 0; }

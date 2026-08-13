@@ -5,7 +5,7 @@
 "use strict";
 
 // Half-block Unicode art — same rendering the CLI prints (pipeline/ascii_banner.js).
-// The visor/eye rows carry the .accent class: the one phosphor-green glow.
+// The visor row (7) carries the .accent class: the logo-orange eye glow.
 const ASCII = [
   "                        ▄█▀▀▀▀█▄",
   "                     ▄███▄ ▀  ▄███▄▄",
@@ -28,8 +28,8 @@ const ASCII = [
   "                      ▀▀▀▀▀▀▀▀▀▀▀▀",
 ];
 
-// Rows that form BUILDER BOI's visor/eyes — the active glow.
-const EYE_ROWS = new Set([6, 7]);
+// Row that forms BUILDER BOI's visor/eyes — the active glow (matches CLI).
+const EYE_ROWS = new Set([7]);
 
 const IDEA = "zombie survival in a cursed mall, 10 waves";
 const STEPS = [

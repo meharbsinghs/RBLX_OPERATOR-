@@ -6,13 +6,15 @@
   "private": true,
   "type": "commonjs",
   "bin": {
-    "rblx": "pipeline/bridge.js"
+    "rblx": "pipeline/bridge.js",
+    "rblxoperator": "pipeline/console.js"
   },
   "engines": {
     "node": ">=18"
   },
   "scripts": {
     "rblx": "node pipeline/bridge.js",
+    "console": "node pipeline/console.js",
     "init": "node pipeline/bridge.js init",
     "banner": "node pipeline/bridge.js banner",
     "doctor": "node pipeline/bridge.js doctor",

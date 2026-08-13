@@ -11,7 +11,7 @@
  *   node pipeline/ascii_banner.js               # print to stdout
  *   node pipeline/ascii_banner.js --save path   # write plain text file
  *   node pipeline/ascii_banner.js --cols 80     # target width (any size, 40-110)
- *   node pipeline/ascii_banner.js --color       # ANSI 256: gray body, phosphor eyes
+ *   node pipeline/ascii_banner.js --color       # ANSI 256: gray body, logo-orange eyes
  */
 
 const fs = require("fs");
@@ -172,10 +172,11 @@ function avgRegion(data, width, x0, x1, y0, y1) {
 
 const esc = (code, s) => `\x1b[38;5;${code}m${s}\x1b[0m`;
 
-// One accent only: 114 = phosphor mint green (the eyes/visor), 244 = neutral
-// gray for the body. Nothing else gets color.
-const ACCENT = "114";
-const BODY = "244";
+// One accent only, matched to the logo's palette: 214 = the logo's orange
+// (#f8a808 -> ANSI 214), 246 = the logo's neutral gray (#989898 -> ANSI 246).
+// Eyes/visor get the orange; the body stays gray. Nothing else gets color.
+const ACCENT = "214";
+const BODY = "246";
 
 function renderBlockLogo(pngPath, cols) {
   const { width, height, data } = decodePng(fs.readFileSync(pngPath));
@@ -301,7 +302,7 @@ function wordmark(text, pad = 2) {
 }
 
 function banner(opts = {}) {
-  const cols = opts.cols || 84;
+  const cols = opts.cols || 56;  // 56-col default: smaller, always fits a console
   const color = !!opts.color;
   const logoPath = opts.logoPath || path.join(ROOT, "assets", "branding", "logo.png");
   let art = "";
@@ -331,11 +332,11 @@ function colorizeBlocks(text, { hot = ACCENT } = {}) {
 
 function main() {
   const args = process.argv.slice(2);
-  let cols = 84;
+  let cols = 56;
   let save = null;
   let color = false;
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--cols") cols = parseInt(args[++i], 10) || 84;
+    if (args[i] === "--cols") cols = parseInt(args[++i], 10) || 56;
     else if (args[i] === "--save") save = args[++i];
     else if (args[i] === "--color") color = true;
   }

@@ -82,6 +82,8 @@ RBLX Operator — autonomous prompt-to-Roblox-game engine, built on opencode
 
 Commands:
   banner              Print the BUILDER BOI Unicode block banner
+  console             Launch the interactive operator console (rblxoperator)
+                      — talk naturally ("hi operator design this"), use /help, /arch
   doctor              Toolchain + environment health check (opencode, rojo, git, keys)
   init                Scaffold .env and directories
   prompt              Print the master derivation prompt (pipeline/system_prompt.md)
@@ -114,13 +116,13 @@ Commands:
 }
 
 // Print the BUILDER BOI Unicode block banner. In a real terminal it renders
-// live at the current width (gray body, phosphor eyes) so it always fits any
+// live at a compact width (gray body, logo-orange eyes) so it always fits any
 // terminal size — the pre-rendered banner.txt stays as the canonical non-TTY
 // asset. Suppressed for non-TTY (CI) output unless requested.
 function printBanner() {
   if (process.stdout.isTTY) {
-    const width = process.stdout.columns || 84;
-    const cols = Math.min(Math.max(width - 2, 40), 110);
+    const width = process.stdout.columns || 56;
+    const cols = Math.min(Math.max(width - 2, 40), 60);
     const color = !process.env.NO_COLOR && process.env.TERM !== "dumb";
     console.log(ascii.banner({ cols, color }));
     return;
@@ -604,6 +606,7 @@ async function main() {
   }
   switch (cmd) {
     case undefined: printBanner(); usage(); break;
+    case "console": require("./console").start(); break;
     case "banner": cmdBanner(); break;
     case "doctor": cmdDoctor(); break;
     case "init": cmdInit(); break;
